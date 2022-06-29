@@ -1,0 +1,20 @@
+<mat-toolbar color="primary">
+    <span class="gap">{{data.title}}</span>
+    <span class="filler"></span>
+    <button mat-icon-button class="example-icon" (click)="onNoClick()" aria-label="Example icon-button with share icon">
+        <mat-icon>close</mat-icon>
+    </button>
+</mat-toolbar>
+<div mat-dialog-content>
+    <ul class="text-danger" *ngIf="errors.length">
+        <li *ngFor="let error of errors" class="text-error">
+            {{error.msg}}
+        </li>
+    </ul>
+    <p>Form comes here...</p>
+</div>
+<div mat-dialog-actions class="text-center">
+    <button mat-stroked-button class="close" (click)="onNoClick()" color="warn">Cancel</button>
+    <mat-spinner-button type="submit" [options]="spinnerButtonOptions" (btnClick)="onSubmit()">
+    </mat-spinner-button>
+</div>

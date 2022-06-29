@@ -1,0 +1,19 @@
+.mat-simple-snackbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  line-height: 20px;
+  opacity: 1;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+}
+
+.mat-simple-snackbar-action {
+  color: #ff4081;
+  line-height: 1;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 500;
+  flex-shrink: 0;
+  margin: -8px -8px -8px 8px;
+}

@@ -1,0 +1,17 @@
+<mat-toolbar color="primary">
+    <span>Code of Duty</span>
+    <span class="example-spacer"></span>
+    <a mat-stroked-button [routerLink]="'/users'" [routerLinkActive]="'mat-accent active'">Users</a>
+    <a mat-stroked-button [routerLink]="'/sites'" [routerLinkActive]="'mat-accent active'">Sites</a>
+    <a mat-stroked-button [routerLink]="'/triage'" [routerLinkActive]="'mat-accent active'">Triage</a>
+    <span class="welcome-text">Hello Username</span>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>person_pin</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="logout()">
+            <span>Logout</span>
+        </button>
+    </mat-menu>
+</mat-toolbar>
+<router-outlet></router-outlet>
