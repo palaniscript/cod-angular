@@ -49,6 +49,8 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     MatExpansionModule,
     MatButtonToggleModule,
     MatProgressSpinnerModule,
+    MatFormFieldModule, 
+    MatInputModule
   ],
 })
 export class AppMaterialModule { }

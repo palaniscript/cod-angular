@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatProgressButtonOptions } from 'mat-progress-buttons';
 import { ErrorMessage, User } from 'src/app/shared/model';
@@ -17,16 +17,23 @@ export class AddEditUserComponent implements OnInit {
   public userForm = new FormGroup({});
   public model: User = {};
   public errors: ErrorMessage[] = [];
+  public formGroup: FormGroup;
+  public siteId = new FormControl();
 
   constructor(
     public readonly dialogRef: MatDialogRef<AddEditUserComponent>,
     private readonly notification: NotificationsService,
     private readonly configService: ConfigService,
     @Inject(MAT_DIALOG_DATA) public data: any,
+    private fb: FormBuilder
   ) {
   }
 
   ngOnInit() {
+    this.formGroup = this.fb.group([
+     // siteId: [''],
+      
+    ])
   }
 
   onNoClick(): void {
