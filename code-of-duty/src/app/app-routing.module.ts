@@ -5,8 +5,9 @@ import { LoginComponent } from './login/login.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
+  { path: '', component: LoginComponent},
   {
-    path: '',
+    path: 'dashboard',
     component: SiteLayoutComponent,
     loadChildren: () => import('src/app/dashboard/dashboard.module').then(m => m.DashboardModule),
     data: {
@@ -50,7 +51,7 @@ const routes: Routes = [
     },
     // canActivate: [AuthGuardService]
   },
-  { path: 'login', component: LoginComponent },
+ 
   { path: '404', component: NotFoundComponent },
   { path: '**', redirectTo: '/404' }
 ];
