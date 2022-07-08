@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -13,10 +13,11 @@ import { UsersService } from './users.service';
 import { NotificationsService } from 'src/notifications.service';
 
 export interface UserElement {
-  siteId: string;
-  siteName: string;
-  Ex1cewisid: string;
-  status: string;
+  userName: string;
+  password: string;
+  email: string;
+  role: string;
+  status: string
 }
 
 @Component({
@@ -25,7 +26,7 @@ export interface UserElement {
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-  public displayedColumns: string[] = ['siteId', 'siteName', 'Ex1cewisid', 'status', 'action'];
+  public displayedColumns: string[] = ['userName', 'password', 'email', 'role', 'status', 'action'];
   public dataSource: MatTableDataSource<any>;
   public spinnerButtonOptions: MatProgressButtonOptions =
     { ...this.configService.spinnerButtonOptions, text: 'Refresh', buttonIcon: { fontIcon: 'refresh' } };
@@ -35,8 +36,8 @@ export class UsersComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   columns: { header: string; columnDef: string; }[];
-  users: { siteId: string; siteName: string; Ex1cewisid: string; status: string; }[];
-
+  users: { userName: string; password: string; email: string; status: string; role: string; }[];
+  @Output() dialogResult: EventEmitter<any> = new EventEmitter();
   constructor(
     private configService: ConfigService,
     private dialog: MatDialog,
@@ -53,28 +54,32 @@ export class UsersComponent implements OnInit {
     this.spinnerButtonOptions.active = true;
     const ELEMENT_DATA: UserElement[] = [
       {
-        'siteId': 'AZ-0001',
-        'siteName': 'Dream City Glendale (Bridge)',
-        'Ex1cewisid': 'Dream_City_Glendale_Bridge',
-        'status': 'Completed'
+        'userName': 'AZ-0001',
+        'password': 'password123',
+        'email': 'Dream_City_Glendale_Bridge@gmail.com',
+        'role': 'Site Engineer',
+        'status': 'active'
       },
       {
-        'siteId': 'AZ-0002',
-        'siteName': 'Dream City Glendale (Gym)',
-        'Ex1cewisid': 'Gym',
-        'status': 'Open'
+        'userName': 'AZ-0002',
+        'password': 'password123',
+        'email': 'Gym@gmail.com',
+        'role': 'Site Engineer',
+        'status': 'active'
       },
       {
-        'siteId': 'AZ-0003',
-        'siteName': 'Dream City Glendale (Sanctury)',
-        'Ex1cewisid': 'Sanctury',
-        'status': 'Open'
+        'userName': 'AZ-0003',
+        'password': 'password123',
+        'email': 'Sanctury@gmail.com',
+        'role': 'Administrator',
+        'status': 'active'
       },
       {
-        'siteId': 'AZ-0004',
-        'siteName': 'Dream City Glendale (Village)',
-        'Ex1cewisid': 'Village',
-        'status': 'Open'
+        'userName': 'AZ-0004',
+        'password': 'password123',
+        'email': 'Village@gmail.com',
+        'role': 'Administrator',
+        'status': 'active'
       }
     ];
     // this.dataSource = new MatTableDataSource(users);
@@ -84,16 +89,20 @@ export class UsersComponent implements OnInit {
     
     this.columns = [
       {
-        'header': 'Site Id',
-        'columnDef': 'siteId'
+        'header': 'User Name',
+        'columnDef': 'userName'
       },
       {
-        'header': 'Site Name',
-        'columnDef': 'siteName'
+        'header': 'Password',
+        'columnDef': 'password'
       },
       {
-        'header': 'Ex1cewisid',
-        'columnDef': 'Ex1cewisid'
+        'header': 'Email',
+        'columnDef': 'email'
+      },
+      {
+        'header': 'Role',
+        'columnDef': 'role'
       },
       {
         'header': 'Status',
@@ -106,17 +115,23 @@ export class UsersComponent implements OnInit {
   }
 
   addNewUser(): void {
+    const obj = {
+      sourceData: null,
+      action: 'add'
+    }
     this.addEditDialogRef = this.dialog.open(AddEditUserComponent, {
       data: {
         title: 'Add New User',
-        user: null
+        user: obj,
+        height: '550px'
       },
       disableClose: true,
       panelClass: 'pm-dialog'
     });
 
     this.addEditDialogRef.afterClosed().subscribe(dialogResult => {
-      if (dialogResult && dialogResult.response) {
+      if (dialogResult && dialogResult.data) {
+        alert("134::::" + JSON.stringify(dialogResult.data));
         this.loadUsers();
       }
     });
@@ -127,14 +142,18 @@ export class UsersComponent implements OnInit {
     this.addEditDialogRef = this.dialog.open(AddEditUserComponent, {
       data: {
         title: 'Edit User',
-        user: row
+        user: row,
+        height: '550px'
       },
       disableClose: true,
       panelClass: 'pm-dialog'
     });
 
     this.addEditDialogRef.afterClosed().subscribe(dialogResult => {
-      if (dialogResult && dialogResult.response) {
+      if (dialogResult && dialogResult.data) {
+        
+        console.log("149:::::" + JSON.stringify(dialogResult));
+        this.dialogResult.next(dialogResult);
         this.loadUsers();
       }
     });
