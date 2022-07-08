@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 import { LoaderService } from 'src/loader.service';
 
 @Component({
   selector: 'app-site-header',
   templateUrl: './site-header.component.html',
-  styleUrls: ['./site-header.component.scss']
 })
 export class SiteHeaderComponent implements OnInit {
 
@@ -18,7 +18,9 @@ export class SiteHeaderComponent implements OnInit {
     // private sidenav: SidenavService,
     private router: Router,
     private loaderService: LoaderService,
-    public titleService: Title) { }
+    public titleService: Title) {
+    this.appTitle = environment.appTitle;
+  }
 
   ngOnInit() {
     this.chkScreenMode();

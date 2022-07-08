@@ -24,6 +24,15 @@ const routes: Routes = [
     // canActivate: [AuthGuardService]
   },
   {
+    path: 'roles',
+    component: SiteLayoutComponent,
+    loadChildren: () => import('src/app/roles/roles.module').then(m => m.RolesModule),
+    data: {
+      title: 'Roles'
+    },
+    // canActivate: [AuthGuardService]
+  },
+  {
     path: 'sites',
     component: SiteLayoutComponent,
     loadChildren: () => import('src/app/sites/sites.module').then(m => m.SitesModule),
