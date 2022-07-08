@@ -1,7 +1,8 @@
 <mat-toolbar color="primary">
-    <span>Code of Duty</span>
-    <span class="example-spacer"></span>
+    <span>{{appTitle}}</span>
+    <span class="spacer"></span>
     <a mat-stroked-button [routerLink]="'/users'" [routerLinkActive]="'mat-accent active'">Users</a>
+    <a mat-stroked-button [routerLink]="'/roles'" [routerLinkActive]="'mat-accent active'">Roles</a>
     <a mat-stroked-button [routerLink]="'/sites'" [routerLinkActive]="'mat-accent active'">Sites</a>
     <a mat-stroked-button [routerLink]="'/triage'" [routerLinkActive]="'mat-accent active'">Triage</a>
     <span class="welcome-text">Hello Username</span>

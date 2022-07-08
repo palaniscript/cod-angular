@@ -2,5 +2,51 @@
 @import 'variables';
 @import 'dialog';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+table,
+.mat-form-field {
+  width: 100%
+}
+
+.page-header {
+  background: white;
+  padding: 15px 20px;
+  border-bottom: 1px solid #ececec;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  box-shadow: 0 0 4px 2px #ececec;
+  // Make feature header sticky
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  margin-bottom: 20px;
+
+  &>.start {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    height: 30px;
+  }
+}

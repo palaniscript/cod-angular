@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  appTitle: 'Angular App',
+  appTitle: 'Code of Duty',
   pageSizeOptions: [5, 10, 25, 100],
-  apiUrl: 'http://localhost:3000/api/',
+  apiUrl: 'http://localhost:8080/api/',
 };
 
 /*

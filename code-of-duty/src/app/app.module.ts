@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppMaterialModule } from './app-material/app-material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { SiteHeaderComponent } from './layout/site-header/site-header.component';
 import { SiteLayoutComponent } from './layout/site-layout/site-layout.component';
 import { LoginComponent } from './login/login.component';
@@ -21,11 +22,13 @@ import { ProfileComponent } from './profile/profile.component';
     ProfileComponent,
     SiteLayoutComponent,
     SiteHeaderComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     AppMaterialModule,
     MatFormFieldModule, 
     MatInputModule
