@@ -14,7 +14,7 @@
     <div [formGroup]="userForm">
       <mat-form-field appearance="fill">
         <mat-label>User Name</mat-label>
-        <input matInput formControlName="userName">
+        <input matInput formControlName="username">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Password</mat-label>
@@ -26,14 +26,14 @@
       </mat-form-field>
       <mat-form-field appearance="fill" *ngIf="data.user.action !== 'add'">
         <mat-label>Role</mat-label>
-        <mat-select formControlName="role" [(value)]="data.user.role">
+        <mat-select formControlName="role">
           <mat-option value="Site Engineer">Site Engineer</mat-option>
           <mat-option value="Administrator">Administrator</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill" *ngIf="data.user.action !== 'add'">
         <mat-label>Status</mat-label>
-        <mat-select formControlName="status" [(value)]="data.user.status">
+        <mat-select formControlName="status">
           <mat-option value="active">Active</mat-option>
           <mat-option value="inactive">Inactive</mat-option>
         </mat-select>
@@ -41,14 +41,14 @@
       <!-- On Add User -->
       <mat-form-field appearance="fill" *ngIf="data.user.action === 'add'">
         <mat-label>Role</mat-label>
-        <mat-select formControlName="role" [(value)]="data.user.role">
+        <mat-select formControlName="role">
           <mat-option value="Site Engineer">Site Engineer</mat-option>
           <mat-option value="Administrator">Administrator</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill" *ngIf="data.user.action === 'add'">
         <mat-label>Status</mat-label>
-        <mat-select formControlName="status" [(value)]="data.user.status">
+        <mat-select formControlName="status">
           <mat-option value="active">Active</mat-option>
           <mat-option value="inactive">Inactive</mat-option>
         </mat-select>
@@ -59,4 +59,11 @@
         <mat-spinner-button type="submit" [options]="spinnerButtonOptions" (btnClick)="onSubmit()">
         </mat-spinner-button>
     </div>
+</div>
+
+<div class="overlay" *ngIf="loading">
+  <div class="center">
+    <mat-progress-spinner diameter=50 mode="indeterminate" color="ThemePalette">
+    </mat-progress-spinner> 
+  </div>
 </div>

@@ -13,7 +13,7 @@ import { UsersService } from './users.service';
 import { NotificationsService } from 'src/notifications.service';
 
 export interface UserElement {
-  userName: string;
+  username: string;
   password: string;
   email: string;
   role: string;
@@ -26,7 +26,7 @@ export interface UserElement {
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-  public displayedColumns: string[] = ['userName', 'password', 'email', 'role', 'status', 'action'];
+  public displayedColumns: string[] = ['username', 'password', 'email', 'role', 'status', 'action'];
   public dataSource: MatTableDataSource<any>;
   public spinnerButtonOptions: MatProgressButtonOptions =
     { ...this.configService.spinnerButtonOptions, text: 'Refresh', buttonIcon: { fontIcon: 'refresh' } };
@@ -36,12 +36,14 @@ export class UsersComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   columns: { header: string; columnDef: string; }[];
-  users: { userName: string; password: string; email: string; status: string; role: string; }[];
+  users: { username: string; password: string; email: string; status: string; role: string; }[];
   @Output() dialogResult: EventEmitter<any> = new EventEmitter();
+  loading = false;
+
   constructor(
     private configService: ConfigService,
     private dialog: MatDialog,
-    //public usersService: UsersService,
+    private readonly usersService: UsersService,
     private readonly notification: NotificationsService,
   ) {
   }
@@ -52,45 +54,10 @@ export class UsersComponent implements OnInit {
 
   loadUsers(): void {
     this.spinnerButtonOptions.active = true;
-    const ELEMENT_DATA: UserElement[] = [
-      {
-        'userName': 'AZ-0001',
-        'password': 'password123',
-        'email': 'Dream_City_Glendale_Bridge@gmail.com',
-        'role': 'Site Engineer',
-        'status': 'active'
-      },
-      {
-        'userName': 'AZ-0002',
-        'password': 'password123',
-        'email': 'Gym@gmail.com',
-        'role': 'Site Engineer',
-        'status': 'active'
-      },
-      {
-        'userName': 'AZ-0003',
-        'password': 'password123',
-        'email': 'Sanctury@gmail.com',
-        'role': 'Administrator',
-        'status': 'active'
-      },
-      {
-        'userName': 'AZ-0004',
-        'password': 'password123',
-        'email': 'Village@gmail.com',
-        'role': 'Administrator',
-        'status': 'active'
-      }
-    ];
-    // this.dataSource = new MatTableDataSource(users);
-    // this.dataSource.paginator = this.paginator;
-    // this.dataSource.sort = this.sort;
-    this.dataSource = new MatTableDataSource(ELEMENT_DATA); 
-    
     this.columns = [
       {
         'header': 'User Name',
-        'columnDef': 'userName'
+        'columnDef': 'username'
       },
       {
         'header': 'Password',
@@ -109,9 +76,13 @@ export class UsersComponent implements OnInit {
         'columnDef': 'status'
       }
     ]
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-    this.spinnerButtonOptions.active = false;
+    this.loading = true;
+    this.usersService.getUsers().subscribe((response: User[]) => {
+      this.loading = false;
+      this.dataSource = new MatTableDataSource(response);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+    });
   }
 
   addNewUser(): void {
@@ -130,11 +101,19 @@ export class UsersComponent implements OnInit {
     });
 
     this.addEditDialogRef.afterClosed().subscribe(dialogResult => {
-      if (dialogResult && dialogResult.data) {
-        alert("134::::" + JSON.stringify(dialogResult.data));
-        this.loadUsers();
-      }
-    });
+      if (dialogResult && dialogResult?.['data'] && dialogResult?.['data'] !== null) {
+        this.loading = true;
+        this.usersService.createUser(dialogResult?.['data']).subscribe((response) => {
+              this.loading = false;
+              this.notification.success('Role created successfully');
+              //this.dialogRef.close({ response: true });
+            }, error => {
+              this.loading = false;
+              this.notification.error('Unable to create the role')
+            });
+          }
+        }
+    );
   }
 
   editUser(row): void {
@@ -148,15 +127,32 @@ export class UsersComponent implements OnInit {
       disableClose: true,
       panelClass: 'pm-dialog'
     });
-
     this.addEditDialogRef.afterClosed().subscribe(dialogResult => {
-      if (dialogResult && dialogResult.data) {
-        
-        console.log("149:::::" + JSON.stringify(dialogResult));
-        this.dialogResult.next(dialogResult);
-        this.loadUsers();
-      }
-    });
+      if (dialogResult && dialogResult?.['data'] && dialogResult?.['data'] !== null) {
+        this.loading = true;
+        setTimeout(() => {
+          this.usersService.updateUser(dialogResult?.['data'], row).subscribe((response) => {
+            this.loading = false;
+            this.notification.success('User updated successfully');
+           // this.dialogRef.close({ response: true });
+            this.loadUsers();
+          }, error => {
+            this.loading = false;
+            this.notification.error('Unable to update the user')
+          });
+        }, 5000);
+      } 
+      // else {
+      //   this.rolesService.createRole(this.roleForm.value).subscribe((response: Role) => {
+      //     this.loading = false;
+      //     this.notification.success('Role created successfully');
+      //     this.dialogRef.close({ response: true });
+      //   }, error => {
+      //     this.notification.error('Unable to create the role')
+      //   });
+      // }
+   // }
+  })
   }
 
   deleteUser(row): void {
@@ -172,22 +168,25 @@ export class UsersComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(dialogResult => {
       if (dialogResult) {
-       // this.delete(row.id);
+        this.delete(dialogResult, row);
       }
     });
   }
 
-  // private delete(userId): void {
-  //   this.usersService.deleteUser(userId).subscribe(res => {
-  //     if (res.success) {
-  //       this.notification.success(res.message || '');
-  //       this.loadUsers();
-  //     } else {
-  //       if (typeof res.message === "string") {
-  //         this.notification.error(res.message);
-  //       }
-  //     }
-  //   });
-  // }
+  private delete(userId, row): void {
+    this.usersService.deleteUser(row.id).subscribe(res => {
+      this.loading = true;
+      if (res.success) {
+        this.loading = false;
+        this.notification.success(res.message || '');
+        this.loadUsers();
+      } else {
+        this.loading = false;
+        if (typeof res.message === "string") {
+          this.notification.error(res.message);
+        }
+      }
+    });
+  }
 
 }
