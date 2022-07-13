@@ -39,6 +39,7 @@ export interface UsersResponse extends apiResponse {
 }
 
 export interface UserResponse extends apiResponse {
+    role: any;
     data?: User
 }
 
