@@ -1,10 +1,13 @@
 <mat-toolbar color="primary">
     <span>{{appTitle}}</span>
     <span class="spacer"></span>
-    <a mat-stroked-button [routerLink]="'/users'" [routerLinkActive]="'mat-accent active'">Users</a>
-    <a mat-stroked-button [routerLink]="'/roles'" [routerLinkActive]="'mat-accent active'">Roles</a>
-    <a mat-stroked-button [routerLink]="'/sites'" [routerLinkActive]="'mat-accent active'">Sites</a>
-    <a mat-stroked-button [routerLink]="'/triage'" [routerLinkActive]="'mat-accent active'">Triage</a>
+    <div>
+        <a mat-stroked-button [routerLink]="'/users'" [routerLinkActive]="'mat-accent active-menu'">Users</a>
+        <a mat-stroked-button [routerLink]="'/roles'" [routerLinkActive]="'mat-accent active-menu'">Roles</a>
+        <a mat-stroked-button [routerLink]="'/rules'" [routerLinkActive]="'mat-accent active-menu'">Rules</a>
+        <a mat-stroked-button [routerLink]="'/sites'" [routerLinkActive]="'mat-accent active-menu'">Sites</a>
+        <a mat-stroked-button [routerLink]="'/triage'" [routerLinkActive]="'mat-accent active-menu'">Triage</a>
+    </div>
     <span class="welcome-text">Hello Username</span>
     <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>person_pin</mat-icon>

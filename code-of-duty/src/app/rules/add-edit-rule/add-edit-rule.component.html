@@ -1,0 +1,60 @@
+<mat-toolbar color="primary">
+    <span class="gap">{{data.title}}</span>
+    <span class="filler"></span>
+    <button mat-icon-button (click)="onNoClick()" aria-label="close icon">
+        <mat-icon>close</mat-icon>
+    </button>
+</mat-toolbar>
+<div mat-dialog-content [formGroup]="ruleForm">
+    <mat-form-field appearance="fill">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" placeholder="Enter the rule title">
+        <mat-error *ngIf="getFormControl('title')?.errors?.required">Title is required</mat-error>
+        <!-- <mat-error *ngIf="rule?.errors?.roleExists">Role already exists</mat-error> -->
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" placeholder="Enter the rule description"></textarea>
+        <mat-error *ngIf="getFormControl('description')?.errors?.required">Description is required</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>System</mat-label>
+        <mat-select formControlName="system" (selectionChange)="onSystemChange($event)">
+            <mat-option *ngFor="let system of systems" [value]="system.value">
+                {{system.viewValue}}
+            </mat-option>
+        </mat-select>
+        <mat-error *ngIf="getFormControl('system')?.errors?.required">Please select a system</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" *ngIf="showEndPoint">
+        <mat-label>Endpoint</mat-label>
+        <input matInput formControlName="endpoint" placeholder="Enter the rule endpoint">
+        <mat-hint>Some hint comes here</mat-hint>
+        <mat-error *ngIf="getFormControl('endpoint')?.errors?.required">Endpoint is required</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" *ngIf="showEndPoint">
+        <mat-label>Check Type</mat-label>
+        <mat-select formControlName="checkType" (selectionChange)="onCheckTypeChange($event)">
+            <mat-option *ngFor="let type of checkTypes" [value]="type.value">
+                {{type.viewValue}}
+            </mat-option>
+        </mat-select>
+        <mat-error *ngIf="getFormControl('checkType')?.errors?.required">Please select a type</mat-error>
+    </mat-form-field>
+    <ng-container *ngIf="showMatchingFields">
+        <mat-form-field appearance="fill">
+            <mat-label>Source Property</mat-label>
+            <input matInput formControlName="source" placeholder="Enter the source">
+            <mat-error *ngIf="getFormControl('source')?.errors?.required">Source is required</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Response Property</mat-label>
+            <input matInput formControlName="response" placeholder="Enter the response">
+            <mat-error *ngIf="getFormControl('response')?.errors?.required">Response is required</mat-error>
+        </mat-form-field>
+    </ng-container>
+</div>
+<div mat-dialog-actions class="text-center">
+    <button mat-stroked-button class="close" (click)="onNoClick()" color="warn">Cancel</button>
+    <button type="submit" mat-stroked-button (click)="onSubmit()" color="primary" [disabled]="loading">Submit</button>
+</div>
