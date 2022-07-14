@@ -8,6 +8,7 @@ export interface ErrorMessage {
 export interface User {
     id?: number;
     password?: string;
+    accessToken?: string;
     role?: number;
     roleName?: string;
     image?: string;
@@ -38,6 +39,7 @@ export interface UsersResponse extends apiResponse {
 }
 
 export interface UserResponse extends apiResponse {
+    role: any;
     data?: User
 }
 

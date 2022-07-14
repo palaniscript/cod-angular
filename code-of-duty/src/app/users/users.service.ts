@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { apiResponse, UserResponse, UsersResponse } from '../shared/model';
+import { apiResponse, User, UserResponse, UsersResponse } from '../shared/model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +13,16 @@ export class UsersService {
     private readonly http: HttpClient,
   ) { }
 
-  getUsers(): Observable<UsersResponse> {
-    return this.http.get<UsersResponse>(environment.apiUrl + 'users');
+  getUsers(user?): Observable<User[]> {
+    if (!user) {
+      return this.http.get<User[]>(environment.apiUrl + 'users');
+    } else {
+      return this.http.get<User[]>(environment.apiUrl + 'users?user=' + user);
+    }
   }
 
   getUser(userId: number): Observable<UserResponse> {
-    return this.http.get<UserResponse>(environment.apiUrl + 'user/' + userId);
+    return this.http.get<UserResponse>(environment.apiUrl + 'users/' + userId);
   }
 
   createUser(user): Observable<apiResponse> {

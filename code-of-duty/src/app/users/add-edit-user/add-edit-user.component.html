@@ -5,20 +5,65 @@
         <mat-icon>close</mat-icon>
     </button>
 </mat-toolbar>
-<div mat-dialog-content [formGroup]="formGroup">
+<div mat-dialog-content>
     <ul class="text-danger" *ngIf="errors.length">
         <li *ngFor="let error of errors" class="text-error">
             {{error.msg}}
         </li>
     </ul>
-    <mat-form-field appearance="fill" class="col-md-12">
-        <mat-label>Site Id</mat-label>
-        <input mat-input formControlName="siteId">
-    </mat-form-field>
-
+    <div [formGroup]="userForm">
+      <mat-form-field appearance="fill">
+        <mat-label>User Name</mat-label>
+        <input matInput formControlName="username">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input type="password" matInput formControlName="password">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input type="email" matInput formControlName="email">
+      </mat-form-field>
+      <mat-form-field appearance="fill" *ngIf="data.user.action !== 'add'">
+        <mat-label>Role</mat-label>
+        <mat-select formControlName="role">
+          <mat-option value="Site Engineer">Site Engineer</mat-option>
+          <mat-option value="Administrator">Administrator</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill" *ngIf="data.user.action !== 'add'">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option value="active">Active</mat-option>
+          <mat-option value="inactive">Inactive</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <!-- On Add User -->
+      <mat-form-field appearance="fill" *ngIf="data.user.action === 'add'">
+        <mat-label>Role</mat-label>
+        <mat-select formControlName="role">
+          <mat-option value="Site Engineer">Site Engineer</mat-option>
+          <mat-option value="Administrator">Administrator</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill" *ngIf="data.user.action === 'add'">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option value="active">Active</mat-option>
+          <mat-option value="inactive">Inactive</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="text-center">
+        <button mat-stroked-button class="close" (click)="onNoClick()" color="warn">Cancel</button>
+        <mat-spinner-button type="submit" [options]="spinnerButtonOptions" (btnClick)="onSubmit()">
+        </mat-spinner-button>
+    </div>
 </div>
-<div mat-dialog-actions class="text-center">
-    <button mat-stroked-button class="close" (click)="onNoClick()" color="warn">Cancel</button>
-    <mat-spinner-button type="submit" [options]="spinnerButtonOptions" (btnClick)="onSubmit()">
-    </mat-spinner-button>
+
+<div class="overlay" *ngIf="loading">
+  <div class="center">
+    <mat-progress-spinner diameter=50 mode="indeterminate" color="ThemePalette">
+    </mat-progress-spinner> 
+  </div>
 </div>
