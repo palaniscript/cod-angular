@@ -28,6 +28,17 @@ export interface Role {
     modified?: number;
 }
 
+export interface Rule {
+    id?: number,
+    title?: string,
+    description?: string,
+    system?: string,
+    endPoint?: string,
+    checkType?: string,
+    source?: string,
+    response?: string
+}
+
 export interface apiResponse {
     success: boolean;
     message?: string | ErrorMessage[];
@@ -53,5 +64,5 @@ export interface LoginResponse extends apiResponse {
 }
 
 export interface SettingsResponse extends apiResponse {
-    
+
 }

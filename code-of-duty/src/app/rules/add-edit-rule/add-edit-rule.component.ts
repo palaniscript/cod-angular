@@ -1,10 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AddEditRoleComponent } from 'src/app/roles/add-edit-role/add-edit-role.component';
-import { RolesService } from 'src/app/roles/roles/roles.service';
-import { Role } from 'src/app/shared/model';
+import { Rule } from 'src/app/shared/model';
+import { environment } from 'src/environments/environment';
 import { NotificationsService } from 'src/notifications.service';
+import { existingRuleValidator } from '../custom-validators/existing-rule-validator';
+import { RulesService } from '../rules.service';
 
 @Component({
   selector: 'app-add-edit-rule',
@@ -22,14 +23,14 @@ export class AddEditRuleComponent implements OnInit {
     { value: 'cewis', viewValue: 'CEWIS' }
   ];
   public checkTypes = [
-    { value: 'match', viewValue: 'Match Field' },
-    { value: 'count', viewValue: 'Count should not be empty' }
+    { value: 'count', viewValue: 'Has Data' },
+    { value: 'data', viewValue: 'Validate Data' }
   ];
 
   constructor(
-    public readonly dialogRef: MatDialogRef<AddEditRoleComponent>,
+    public readonly dialogRef: MatDialogRef<AddEditRuleComponent>,
     private readonly notification: NotificationsService,
-    private readonly rolesService: RolesService,
+    private readonly rulesService: RulesService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder
   ) {
@@ -38,40 +39,61 @@ export class AddEditRuleComponent implements OnInit {
   ngOnInit() {
     this.ruleForm = this.fb.group({
       title: ['', [Validators.required],
-        // [existingRoleValidator(this.rolesService, this.data.role)]
+        [existingRuleValidator(this.rulesService, this.data.rule)]
       ],
       description: ['', [Validators.required]],
       system: ['', [Validators.required]],
-      endpoint: ['', [Validators.required]],
+      endPoint: ['', [Validators.required]],
       checkType: ['', [Validators.required]],
       source: ['', [Validators.required]],
-      response: ['', [Validators.required]],
-      count: ['', [Validators.required]]
+      response: ['', [Validators.required]]
     });
     if (this.data.rule !== null) {
-      this.fetchRole();
+      this.fetchRule();
     }
   }
 
   onSystemChange(event) {
     this.showEndPoint = event.value === 'ae' || event.value === 'cewis';
+    if (event.value === 'ae') {
+      this.ruleForm.patchValue({ endPoint: environment.aeUrl });
+    } else if (event.value === 'cewis') {
+      this.ruleForm.patchValue({ endPoint: environment.cewisUrl });
+    }
   }
 
   onCheckTypeChange(event) {
-    this.showMatchingFields = event.value === 'match';
+    this.showMatchingFields = event.value === 'data';
+    if (event.value === 'data') {
+      this.ruleForm.controls.source.setValidators([Validators.required]);
+      this.ruleForm.controls.response.setValidators([Validators.required]);
+    } else {
+      this.ruleForm.controls['source'].clearValidators();
+      this.ruleForm.controls['response'].clearValidators();
+      this.ruleForm.controls['source'].updateValueAndValidity();
+      this.ruleForm.controls['response'].updateValueAndValidity();
+    }
+    this.ruleForm.updateValueAndValidity();
   }
 
-  fetchRole() {
+  fetchRule() {
     this.loading = true;
-    this.rolesService.getRole(this.data.rule.id).subscribe((response: Role) => {
+    this.rulesService.getRule(this.data.rule.id).subscribe((response: Rule) => {
       this.loading = false;
       this.ruleForm.patchValue({
-        role: response.role,
-        description: response.description
+        title: response.title,
+        description: response.description,
+        system: response.system,
+        endPoint: response.endPoint,
+        checkType: response.checkType,
+        source: response.source,
+        response: response.response
       });
+      this.onSystemChange({ value: response.system });
+      this.onCheckTypeChange({ value: response.checkType });
     },
       error => {
-        this.notification.error('Unable to fetch role details')
+        this.notification.error('Unable to fetch rule details')
       }
     );
   }
@@ -90,23 +112,25 @@ export class AddEditRuleComponent implements OnInit {
       this.loading = true;
       if (this.data.rule !== null) {
         setTimeout(() => {
-          this.rolesService.updateRole(this.ruleForm.value, this.data.rule).subscribe((response: Role) => {
+          this.rulesService.updateRule(this.ruleForm.value, this.data.rule).subscribe((response: Rule) => {
             this.loading = false;
-            this.notification.success('Role updated successfully');
+            this.notification.success('Rule updated successfully');
             this.dialogRef.close({ response: true });
           }, error => {
-            this.notification.error('Unable to update the role')
+            this.notification.error('Unable to update the rule');
           });
         }, 5000);
       } else {
-        this.rolesService.createRole(this.ruleForm.value).subscribe((response: Role) => {
+        this.rulesService.createRule(this.ruleForm.value).subscribe((response: Rule) => {
           this.loading = false;
-          this.notification.success('Role created successfully');
+          this.notification.success('Rule created successfully');
           this.dialogRef.close({ response: true });
         }, error => {
-          this.notification.error('Unable to create the role')
+          this.notification.error('Unable to create the rule');
         });
       }
+    } else {
+      console.log('this.ruleForm', this.ruleForm);
     }
   }
 

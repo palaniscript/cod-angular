@@ -4,11 +4,11 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmDialogComponent, ConfirmDialogModel } from 'src/app/confirm-dialog/confirm-dialog.component';
-import { RolesService } from 'src/app/roles/roles/roles.service';
-import { Role } from 'src/app/shared/model';
 import { environment } from 'src/environments/environment';
 import { NotificationsService } from 'src/notifications.service';
 import { AddEditRuleComponent } from '../add-edit-rule/add-edit-rule.component';
+import { RulesService } from '../rules.service';
+import { Rule } from 'src/app/shared/model';
 
 @Component({
   selector: 'app-rules',
@@ -16,9 +16,9 @@ import { AddEditRuleComponent } from '../add-edit-rule/add-edit-rule.component';
 })
 export class RulesComponent implements OnInit {
 
-  public displayedColumns: string[] = ['role', 'description', 'action'];
+  public displayedColumns: string[] = ['title', 'checkType', 'system', 'createdAt', 'action'];
   public pageSizeOptions: number[] = environment.pageSizeOptions;
-  public dataSource: MatTableDataSource<Role>;
+  public dataSource: MatTableDataSource<Rule>;
   public columns: { header: string; columnDef: string; }[];
   private addEditDialogRef: MatDialogRef<AddEditRuleComponent>;
 
@@ -27,7 +27,7 @@ export class RulesComponent implements OnInit {
 
   constructor(
     private readonly dialog: MatDialog,
-    private readonly rolesService: RolesService,
+    private readonly rulesService: RulesService,
     private readonly notification: NotificationsService
   ) {
   }
@@ -37,7 +37,7 @@ export class RulesComponent implements OnInit {
   }
 
   loadRules(): void {
-    this.rolesService.getRoles().subscribe((response: Role[]) => {
+    this.rulesService.getRules().subscribe((response: Rule[]) => {
       this.dataSource = new MatTableDataSource(response);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
@@ -61,7 +61,7 @@ export class RulesComponent implements OnInit {
     });
   }
 
-  editRule(row: Role): void {
+  editRule(row: Rule): void {
     this.addEditDialogRef = this.dialog.open(AddEditRuleComponent, {
       data: {
         title: 'Edit Rule',
@@ -78,7 +78,7 @@ export class RulesComponent implements OnInit {
     });
   }
 
-  deleteRule(row: Role): void {
+  deleteRule(row: Rule): void {
     const message = `Are you sure you want to delete this rule?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
@@ -95,8 +95,8 @@ export class RulesComponent implements OnInit {
     });
   }
 
-  private delete(role: Role): void {
-    this.rolesService.deleteRole(role).subscribe(res => {
+  private delete(rule: Rule): void {
+    this.rulesService.deleteRule(rule).subscribe(res => {
       this.notification.success('Rule deleted successfully');
       this.loadRules();
     });

@@ -24,5 +24,7 @@
 </div>
 <div mat-dialog-actions class="text-center">
     <button mat-stroked-button class="close" (click)="onNoClick()" color="warn">Cancel</button>
-    <button type="submit" mat-stroked-button (click)="onSubmit()" color="primary" [disabled]="loading">Submit</button>
+    <button type="submit" mat-stroked-button (click)="onSubmit()" color="primary" [disabled]="loading">
+        {{data && data.role ? 'Update' : 'Save'}}
+    </button>
 </div>

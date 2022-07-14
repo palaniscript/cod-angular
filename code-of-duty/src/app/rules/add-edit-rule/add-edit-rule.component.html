@@ -10,7 +10,7 @@
         <mat-label>Title</mat-label>
         <input matInput formControlName="title" placeholder="Enter the rule title">
         <mat-error *ngIf="getFormControl('title')?.errors?.required">Title is required</mat-error>
-        <!-- <mat-error *ngIf="rule?.errors?.roleExists">Role already exists</mat-error> -->
+        <mat-error *ngIf="getFormControl('title')?.errors?.ruleExists">Rule already exists</mat-error>
     </mat-form-field>
     <mat-form-field appearance="fill">
         <mat-label>Description</mat-label>
@@ -28,9 +28,9 @@
     </mat-form-field>
     <mat-form-field appearance="fill" *ngIf="showEndPoint">
         <mat-label>Endpoint</mat-label>
-        <input matInput formControlName="endpoint" placeholder="Enter the rule endpoint">
-        <mat-hint>Some hint comes here</mat-hint>
-        <mat-error *ngIf="getFormControl('endpoint')?.errors?.required">Endpoint is required</mat-error>
+        <input matInput formControlName="endPoint" placeholder="Enter the rule endPoint">
+        <mat-hint>You can use siteId, siteName, cewisId as params. use &#123; &#125; for including params</mat-hint>
+        <mat-error *ngIf="getFormControl('endPoint')?.errors?.required">Endpoint is required</mat-error>
     </mat-form-field>
     <mat-form-field appearance="fill" *ngIf="showEndPoint">
         <mat-label>Check Type</mat-label>
@@ -45,6 +45,7 @@
         <mat-form-field appearance="fill">
             <mat-label>Source Property</mat-label>
             <input matInput formControlName="source" placeholder="Enter the source">
+            <mat-hint>Ex: siteId, siteName, cewisId</mat-hint>
             <mat-error *ngIf="getFormControl('source')?.errors?.required">Source is required</mat-error>
         </mat-form-field>
         <mat-form-field appearance="fill">
@@ -56,5 +57,7 @@
 </div>
 <div mat-dialog-actions class="text-center">
     <button mat-stroked-button class="close" (click)="onNoClick()" color="warn">Cancel</button>
-    <button type="submit" mat-stroked-button (click)="onSubmit()" color="primary" [disabled]="loading">Submit</button>
+    <button type="submit" mat-stroked-button (click)="onSubmit()" color="primary" [disabled]="loading">
+        {{data && data.rule ? 'Update' : 'Save'}}
+    </button>
 </div>
