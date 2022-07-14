@@ -107,6 +107,7 @@ export class UsersComponent implements OnInit {
               this.loading = false;
               this.notification.success('Role created successfully');
               //this.dialogRef.close({ response: true });
+              this.loadUsers();
             }, error => {
               this.loading = false;
               this.notification.error('Unable to create the role')
@@ -174,9 +175,10 @@ export class UsersComponent implements OnInit {
   }
 
   private delete(userId, row): void {
+    this.loading = true;
     this.usersService.deleteUser(row.id).subscribe(res => {
-      this.loading = true;
-      if (res.success) {
+      //this.loading = true;
+      if (res.success || res.message === 'User was deleted successfully!') {
         this.loading = false;
         this.notification.success(res.message || '');
         this.loadUsers();

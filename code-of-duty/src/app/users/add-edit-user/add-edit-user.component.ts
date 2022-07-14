@@ -6,6 +6,7 @@ import { ErrorMessage, User } from 'src/app/shared/model';
 import { ConfigService } from 'src/config.service';
 import { NotificationsService } from 'src/notifications.service';
 import { UsersService } from '../users.service';
+import { RolesService } from 'src/app/roles/roles/roles.service';
 
 @Component({
   selector: 'app-add-edit-user',
@@ -20,6 +21,7 @@ export class AddEditUserComponent implements OnInit {
   public model: User = {};
   public errors: ErrorMessage[] = [];
   loading = false;
+  roles;
   // set  value(data) {
   //   this.userForm.setValue({username: data.username, password: data.password, 
   //     email: data.email, role: data.role, status: data.status});
@@ -30,7 +32,8 @@ export class AddEditUserComponent implements OnInit {
     private readonly configService: ConfigService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder,
-    public userService: UsersService
+    public userService: UsersService,
+    private readonly rolesService: RolesService
   ) {
     this.userForm =  fb.group({
       'username': '',
@@ -50,7 +53,11 @@ export class AddEditUserComponent implements OnInit {
       status: ['']
     });
     if (this.data.user !== null && this.data.user?.action !== 'add') {
-      this.fetchUser();
+      this.fetchUser();      
+      this.fetchRole();
+    }
+    else if (this.data.user?.action === 'add') {
+      this.fetchRole();
     }
   }
 
@@ -74,6 +81,21 @@ export class AddEditUserComponent implements OnInit {
   onSubmit(): void {
     this.dialogRef.close({data: this.userForm.value});
     this.userForm.markAllAsTouched();
+  }
+
+  fetchRole() {
+    this.loading = true;
+    this.rolesService.getRoles().subscribe((response) => {
+      this.loading = false;
+      // this.userForm.patchValue({
+      //   role: response.role
+      // });
+      this.roles = response;
+    },
+      error => {
+        this.notification.error('Unable to fetch role details')
+      }
+    );
   }
 }
 

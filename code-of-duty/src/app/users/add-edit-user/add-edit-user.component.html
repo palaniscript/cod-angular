@@ -27,30 +27,30 @@
       <mat-form-field appearance="fill" *ngIf="data.user.action !== 'add'">
         <mat-label>Role</mat-label>
         <mat-select formControlName="role">
-          <mat-option value="Site Engineer">Site Engineer</mat-option>
-          <mat-option value="Administrator">Administrator</mat-option>
+          <mat-option *ngFor="let role of roles"
+          [value]="role.id">{{role.role}}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill" *ngIf="data.user.action !== 'add'">
         <mat-label>Status</mat-label>
         <mat-select formControlName="status">
-          <mat-option value="active">Active</mat-option>
-          <mat-option value="inactive">Inactive</mat-option>
+          <mat-option value="a">Active</mat-option>
+          <mat-option value="i">Inactive</mat-option>
         </mat-select>
       </mat-form-field>
       <!-- On Add User -->
       <mat-form-field appearance="fill" *ngIf="data.user.action === 'add'">
         <mat-label>Role</mat-label>
         <mat-select formControlName="role">
-          <mat-option value="Site Engineer">Site Engineer</mat-option>
-          <mat-option value="Administrator">Administrator</mat-option>
+          <mat-option *ngFor="let role of roles"
+          [value]="role.id">{{role.role}}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill" *ngIf="data.user.action === 'add'">
         <mat-label>Status</mat-label>
         <mat-select formControlName="status">
-          <mat-option value="active">Active</mat-option>
-          <mat-option value="inactive">Inactive</mat-option>
+          <mat-option value="a">Active</mat-option>
+          <mat-option value="i">Inactive</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
