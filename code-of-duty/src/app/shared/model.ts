@@ -90,3 +90,10 @@ export interface LoginResponse extends apiResponse {
 export interface SettingsResponse extends apiResponse {
 
 }
+export interface Site {
+    id?: number,
+    siteId?:string,
+    siteName?: string;
+    cewisId?: string;
+    status?: string;
+}
