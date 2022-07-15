@@ -1,0 +1,38 @@
+<mat-toolbar color="primary">
+    <span class="gap">{{data.title}}</span>
+    <span class="filler"></span>
+    <button mat-icon-button (click)="onNoClick()" aria-label="close icon">
+        <mat-icon>close</mat-icon>
+    </button>
+</mat-toolbar>
+<div mat-dialog-content [formGroup]="siteForm">
+    <ul class="text-danger" *ngIf="errors.length">
+        <li *ngFor="let error of errors" class="text-error">
+            {{error.msg}}
+        </li>
+    </ul>
+    <mat-form-field appearance="fill">
+        <mat-label>Site ID</mat-label>
+        <input matInput formControlName="siteId" placeholder="Enter the Site ID">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Site Name</mat-label>
+        <input matInput formControlName="siteName" placeholder="Enter the Site Name">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Cewis ID</mat-label>
+        <input matInput formControlName="cewisId" placeholder="Enter the CEWIS ID">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option></mat-option>
+          <mat-option value="o">Open</mat-option>
+          <mat-option value="c">Completed</mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+<div mat-dialog-actions class="text-center">
+    <button mat-stroked-button class="close" (click)="onNoClick()" color="warn">Cancel</button>
+    <button type="submit" mat-stroked-button (click)="onSubmit()" color="primary" [disabled]="loading">Submit</button>
+</div>
