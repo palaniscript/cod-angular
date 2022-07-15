@@ -11,6 +11,9 @@ export function existingRoleValidator(rolesService: RolesService, role: Role | n
             switchMap(() => rolesService.getRoles(control.value)),
             map((roles: Role[]) => {
                 if (role && role !== null) {
+                    if (roles && roles.length === 0) {
+                        return null;
+                      }
                     return (roles && roles.length === 1 && roles[0].id === role.id) ? null : { "roleExists": true };
                 }
                 return (roles && roles.length > 0) ? { "roleExists": true } : null;

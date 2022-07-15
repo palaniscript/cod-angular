@@ -1,1 +1,40 @@
-<p>triage works!</p>
+<div class="page-header justify-content-between align-items-center">
+    <div class="start">
+        <div class="title">
+            <h2>Triage Sites</h2>
+        </div>
+    </div>
+    <div class="end">
+        <button mat-flat-button color="accent">
+            <mat-icon>groups</mat-icon> &nbsp;
+            <span>Add New Role</span>
+        </button>
+    </div>
+</div>
+
+<div style="padding: 0 20px" class="mat-elevation-z8">
+    <form>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Site</mat-label>
+            <input type="text" matInput [formControl]="siteControl" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                <mat-option *ngFor="let site of filteredSites | async" [value]="site">
+                    {{site.siteName}}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-hint>Select a site and rules to start triaging.</mat-hint>
+        </mat-form-field>
+        <button type="button" mat-raised-button (click)="onSubmit()" color="primary">
+            Triage
+        </button>
+    </form>
+    <mat-selection-list #rulesList (selectionChange)="onSelectionChange(rulesList.selectedOptions.selected)">
+        <mat-list-option *ngFor="let rule of rules" [value]="rule">
+            <mat-icon mat-list-icon class="rule_status_{{rule.status}}">
+                {{rule.status === 'FAIL' ? 'clear' : (rule.status === 'INPROGRESS' ? 'loop' : 'check_circle')}}
+            </mat-icon>
+            <div mat-line>{{rule.title}}</div>
+            <div mat-line>{{rule.description}}</div>
+        </mat-list-option>
+    </mat-selection-list>
+</div>

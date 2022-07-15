@@ -28,15 +28,39 @@ export interface Role {
     modified?: number;
 }
 
-export interface Rule {
+enum SiteStatus {
+    Active = 'a',
+    Inactive = 'i'
+}
+
+export interface Site {
     id?: number,
-    title?: string,
-    description?: string,
-    system?: string,
-    endPoint?: string,
-    checkType?: string,
-    source?: string,
-    response?: string
+    siteId?: string;
+    siteName?: string;
+    cewisId?: string;
+    status?: SiteStatus;
+    created?: number;
+    modified?: number;
+}
+
+export enum RuleValidationStatus {
+    OPEN = "OPEN",
+    INPROGRESS = "INPROGRESS",
+    FAILED = "FAILED",
+    PASS = "PASS",
+    FAIL = "FAIL"
+}
+
+export interface Rule {
+    id?: number;
+    title?: string;
+    description?: string;
+    system?: string;
+    endPoint?: string;
+    checkType?: string;
+    source?: string;
+    response?: string;
+    status?: RuleValidationStatus;
 }
 
 export interface apiResponse {

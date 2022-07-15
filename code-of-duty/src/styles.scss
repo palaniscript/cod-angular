@@ -16,6 +16,17 @@ body {
   flex: 1 1 auto;
 }
 
+.top-menu {
+  .mat-stroked-button {
+    margin: 0 5px;
+    border: none;
+    &:hover {
+      background-color: #fff;
+      text-decoration: none;
+    }    
+  }
+}
+
 .active-menu {
   background: #fff;
 }

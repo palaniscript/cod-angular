@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Rule } from '../shared/model';
+import { Rule, Site } from '../shared/model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +33,9 @@ export class RulesService {
 
   deleteRule(rule: Rule): Observable<Rule> {
     return this.http.delete<Rule>(environment.apiUrl + 'rules/' + rule.id);
+  }
+
+  getData(endPoint): Observable<any> {
+    return this.http.get(endPoint);
   }
 }
