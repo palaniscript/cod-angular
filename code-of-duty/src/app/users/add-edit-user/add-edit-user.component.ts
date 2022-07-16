@@ -1,12 +1,11 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatProgressButtonOptions } from 'mat-progress-buttons';
-import { ErrorMessage, User } from 'src/app/shared/model';
-import { ConfigService } from 'src/config.service';
-import { NotificationsService } from 'src/notifications.service';
-import { UsersService } from '../users.service';
-import { RolesService } from 'src/app/roles/roles/roles.service';
+import { Component, Inject, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { RolesService } from "src/app/roles/roles/roles.service";
+import { ErrorMessage, Role, User } from "src/app/shared/model";
+import { NotificationsService } from "src/notifications.service";
+import { existingUsernameValidator } from '../custom-validators/existing-username-validator';
+import { UsersService } from "../users.service";
 
 @Component({
   selector: 'app-add-edit-user',
@@ -14,59 +13,57 @@ import { RolesService } from 'src/app/roles/roles/roles.service';
 })
 export class AddEditUserComponent implements OnInit {
 
-  public spinnerButtonOptions: MatProgressButtonOptions =
-    { ...this.configService.spinnerButtonOptions, text: 'Save', buttonIcon: { fontIcon: 'save' } };
-  //public userForm = new FormGroup({});
-  userForm: FormGroup;
-  public model: User = {};
   public errors: ErrorMessage[] = [];
-  loading = false;
-  roles;
-  // set  value(data) {
-  //   this.userForm.setValue({username: data.username, password: data.password, 
-  //     email: data.email, role: data.role, status: data.status});
-  // }
+  public userForm: FormGroup;
+  public loading = false;
+  public roles: Role[];
+  public status: string[] = ['ACTIVE', 'INACTIVE'];
+  private fetchedUser: User;
+
   constructor(
     public readonly dialogRef: MatDialogRef<AddEditUserComponent>,
     private readonly notification: NotificationsService,
-    private readonly configService: ConfigService,
+    private readonly usersService: UsersService,
+    private readonly rolesService: RolesService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private fb: FormBuilder,
-    public userService: UsersService,
-    private readonly rolesService: RolesService
+    private fb: FormBuilder
   ) {
-    this.userForm =  fb.group({
-      'username': '',
-      'password': '',
-      'email': '',
-      'role': '',
-      'status': '',
-    })
   }
 
   ngOnInit() {
+    this.fetchRoles();
     this.userForm = this.fb.group({
-      username: ['', [Validators.required]],
-      password: [''],
-      email: [''],
-      role: [''],
-      status: ['']
+      name: ['', [Validators.required]],
+      username: ['', [Validators.required], [existingUsernameValidator(this.usersService, this.data.user)]],
+      password: ['', [Validators.required]],
+      email: ['', [Validators.required]],
+      role: ['', [Validators.required]],
+      status: ['', [Validators.required]],
     });
-    if (this.data.user !== null && this.data.user?.action !== 'add') {
-      this.fetchUser();      
-      this.fetchRole();
+    if (this.data.user !== null) {
+      this.fetchUser();
     }
-    else if (this.data.user?.action === 'add') {
-      this.fetchRole();
-    }
+  }
+
+  fetchRoles() {
+    this.rolesService.getRoles().subscribe((response: Role[]) => {
+      this.roles = response;
+    });
   }
 
   fetchUser() {
     this.loading = true;
-    this.userService.getUser(this.data.user.id).subscribe((response) => {
+    this.usersService.getUser(this.data.user.id).subscribe((response: User) => {
       this.loading = false;
-      this.userForm.patchValue(response, {onlySelf: true, emitEvent: true});
-      this.userForm.updateValueAndValidity();
+      this.fetchedUser = response;
+      this.userForm.patchValue({
+        username: response.username,
+        name: response.name,
+        password: response.password,
+        email: response.email,
+        role: response.role,
+        status: response.status,
+      });
     },
       error => {
         this.notification.error('Unable to fetch user details')
@@ -78,24 +75,38 @@ export class AddEditUserComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  onSubmit(): void {
-    this.dialogRef.close({data: this.userForm.value});
-    this.userForm.markAllAsTouched();
+  getFormControl(field: string) {
+    return this.userForm.get(field);
   }
 
-  fetchRole() {
-    this.loading = true;
-    this.rolesService.getRoles().subscribe((response) => {
-      this.loading = false;
-      // this.userForm.patchValue({
-      //   role: response.role
-      // });
-      this.roles = response;
-    },
-      error => {
-        this.notification.error('Unable to fetch role details')
+  onSubmit(): void {
+    this.userForm.markAllAsTouched();
+    if (this.userForm.valid) {
+      this.loading = true;
+      if (this.data.user !== null) {
+        setTimeout(() => {
+          const userData = this.userForm.value;
+          // Update password only if changed
+          if (userData.password === this.fetchedUser.password) {
+            delete userData.password;
+          }
+          this.usersService.updateUser(userData, this.data.user).subscribe((response: User) => {
+            this.loading = false;
+            this.notification.success('User updated successfully');
+            this.dialogRef.close({ response: true });
+          }, error => {
+            this.notification.error('Unable to update the user')
+          });
+        }, 5000);
+      } else {
+        this.usersService.createUser(this.userForm.value).subscribe((response: User) => {
+          this.loading = false;
+          this.notification.success('User created successfully');
+          this.dialogRef.close({ response: true });
+        }, error => {
+          this.notification.error('Unable to create the user')
+        });
       }
-    );
+    }
   }
 }
-

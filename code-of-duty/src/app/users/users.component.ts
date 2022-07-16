@@ -1,50 +1,37 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatProgressButtonOptions } from 'mat-progress-buttons';
-import { ConfigService } from 'src/config.service';
-import { environment } from 'src/environments/environment';
-import { ConfirmDialogComponent, ConfirmDialogModel } from '../confirm-dialog/confirm-dialog.component';
-import { User } from '../shared/model';
-import { AddEditUserComponent } from './add-edit-user/add-edit-user.component';
-import { UsersService } from './users.service';
-import { NotificationsService } from 'src/notifications.service';
-
-export interface UserElement {
-  username: string;
-  password: string;
-  email: string;
-  role: string;
-  status: string
-}
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
+import { forkJoin } from 'rxjs';
+import { environment } from "src/environments/environment";
+import { NotificationsService } from "src/notifications.service";
+import { ConfirmDialogComponent, ConfirmDialogModel } from "../confirm-dialog/confirm-dialog.component";
+import { RolesService } from "../roles/roles/roles.service";
+import { User } from "../shared/model";
+import { AddEditUserComponent } from "./add-edit-user/add-edit-user.component";
+import { UsersService } from "./users.service";
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-  public displayedColumns: string[] = ['username', 'password', 'email', 'role', 'status', 'action'];
-  public dataSource: MatTableDataSource<any>;
-  public spinnerButtonOptions: MatProgressButtonOptions =
-    { ...this.configService.spinnerButtonOptions, text: 'Refresh', buttonIcon: { fontIcon: 'refresh' } };
+
+  public displayedColumns: string[] = ['username', 'email', 'roleName', 'status', 'action'];
   public pageSizeOptions: number[] = environment.pageSizeOptions;
+  public dataSource: MatTableDataSource<User>;
+  public columns: { header: string; columnDef: string; }[];
   private addEditDialogRef: MatDialogRef<AddEditUserComponent>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  columns: { header: string; columnDef: string; }[];
-  users: { username: string; password: string; email: string; status: string; role: string; }[];
-  @Output() dialogResult: EventEmitter<any> = new EventEmitter();
-  loading = false;
 
   constructor(
-    private configService: ConfigService,
-    private dialog: MatDialog,
+    private readonly dialog: MatDialog,
     private readonly usersService: UsersService,
-    private readonly notification: NotificationsService,
+    private readonly rolesService: RolesService,
+    private readonly notification: NotificationsService
   ) {
   }
 
@@ -53,111 +40,52 @@ export class UsersComponent implements OnInit {
   }
 
   loadUsers(): void {
-    this.spinnerButtonOptions.active = true;
-    this.columns = [
-      {
-        'header': 'User Name',
-        'columnDef': 'username'
-      },
-      {
-        'header': 'Password',
-        'columnDef': 'password'
-      },
-      {
-        'header': 'Email',
-        'columnDef': 'email'
-      },
-      {
-        'header': 'Role',
-        'columnDef': 'role'
-      },
-      {
-        'header': 'Status',
-        'columnDef': 'status'
-      }
-    ]
-    this.loading = true;
-    this.usersService.getUsers().subscribe((response: User[]) => {
-      this.loading = false;
-      this.dataSource = new MatTableDataSource(response);
+    forkJoin([this.usersService.getUsers(), this.rolesService.getRoles()]).subscribe(([users, roles]) => {
+      users.forEach(user => {
+        const matchingRole = roles.find(role => role.id === user.role);
+        user.roleName = matchingRole ? matchingRole.role : 'NA';
+      });
+      this.dataSource = new MatTableDataSource(users);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     });
   }
 
   addNewUser(): void {
-    const obj = {
-      sourceData: null,
-      action: 'add'
-    }
     this.addEditDialogRef = this.dialog.open(AddEditUserComponent, {
       data: {
         title: 'Add New User',
-        user: obj,
-        height: '550px'
+        user: null
       },
       disableClose: true,
       panelClass: 'pm-dialog'
     });
 
     this.addEditDialogRef.afterClosed().subscribe(dialogResult => {
-      if (dialogResult && dialogResult?.['data'] && dialogResult?.['data'] !== null) {
-        this.loading = true;
-        this.usersService.createUser(dialogResult?.['data']).subscribe((response) => {
-              this.loading = false;
-              this.notification.success('Role created successfully');
-              //this.dialogRef.close({ response: true });
-              this.loadUsers();
-            }, error => {
-              this.loading = false;
-              this.notification.error('Unable to create the role')
-            });
-          }
-        }
-    );
+      if (dialogResult && dialogResult.response) {
+        this.loadUsers();
+      }
+    });
   }
 
-  editUser(row): void {
-    console.log(row);
+  editUser(row: User): void {
     this.addEditDialogRef = this.dialog.open(AddEditUserComponent, {
       data: {
         title: 'Edit User',
-        user: row,
-        height: '550px'
+        user: row
       },
       disableClose: true,
       panelClass: 'pm-dialog'
     });
+
     this.addEditDialogRef.afterClosed().subscribe(dialogResult => {
-      if (dialogResult && dialogResult?.['data'] && dialogResult?.['data'] !== null) {
-        this.loading = true;
-        setTimeout(() => {
-          this.usersService.updateUser(dialogResult?.['data'], row).subscribe((response) => {
-            this.loading = false;
-            this.notification.success('User updated successfully');
-           // this.dialogRef.close({ response: true });
-            this.loadUsers();
-          }, error => {
-            this.loading = false;
-            this.notification.error('Unable to update the user')
-          });
-        }, 5000);
-      } 
-      // else {
-      //   this.rolesService.createRole(this.roleForm.value).subscribe((response: Role) => {
-      //     this.loading = false;
-      //     this.notification.success('Role created successfully');
-      //     this.dialogRef.close({ response: true });
-      //   }, error => {
-      //     this.notification.error('Unable to create the role')
-      //   });
-      // }
-   // }
-  })
+      if (dialogResult && dialogResult.response) {
+        this.loadUsers();
+      }
+    });
   }
 
-  deleteUser(row): void {
-    console.log(row);
+  deleteUser(row: User): void {
     const message = `Are you sure you want to delete this user?`;
     const dialogData = new ConfirmDialogModel("Confirm Action", message);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
@@ -169,26 +97,15 @@ export class UsersComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(dialogResult => {
       if (dialogResult) {
-        this.delete(dialogResult, row);
+        this.delete(row);
       }
     });
   }
 
-  private delete(userId, row): void {
-    this.loading = true;
-    this.usersService.deleteUser(row.id).subscribe(res => {
-      //this.loading = true;
-      if (res.success || res.message === 'User was deleted successfully!') {
-        this.loading = false;
-        this.notification.success(res.message || '');
-        this.loadUsers();
-      } else {
-        this.loading = false;
-        if (typeof res.message === "string") {
-          this.notification.error(res.message);
-        }
-      }
+  private delete(user: User): void {
+    this.usersService.deleteUser(user).subscribe(res => {
+      this.notification.success('User deleted successfully');
+      this.loadUsers();
     });
   }
-
 }

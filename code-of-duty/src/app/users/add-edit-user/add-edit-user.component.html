@@ -1,69 +1,59 @@
 <mat-toolbar color="primary">
-    <span class="gap">{{data.title}}</span>
-    <span class="filler"></span>
-    <button mat-icon-button class="example-icon" (click)="onNoClick()" aria-label="Example icon-button with share icon">
-        <mat-icon>close</mat-icon>
-    </button>
+  <span class="gap">{{data.title}}</span>
+  <span class="filler"></span>
+  <button mat-icon-button (click)="onNoClick()" aria-label="close icon">
+    <mat-icon>close</mat-icon>
+  </button>
 </mat-toolbar>
-<div mat-dialog-content>
-    <ul class="text-danger" *ngIf="errors.length">
-        <li *ngFor="let error of errors" class="text-error">
-            {{error.msg}}
-        </li>
-    </ul>
-    <div [formGroup]="userForm">
-      <mat-form-field appearance="fill">
-        <mat-label>User Name</mat-label>
-        <input matInput formControlName="username">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Password</mat-label>
-        <input type="password" matInput formControlName="password">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Email</mat-label>
-        <input type="email" matInput formControlName="email">
-      </mat-form-field>
-      <mat-form-field appearance="fill" *ngIf="data.user.action !== 'add'">
-        <mat-label>Role</mat-label>
-        <mat-select formControlName="role">
-          <mat-option *ngFor="let role of roles"
-          [value]="role.id">{{role.role}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="fill" *ngIf="data.user.action !== 'add'">
-        <mat-label>Status</mat-label>
-        <mat-select formControlName="status">
-          <mat-option value="a">Active</mat-option>
-          <mat-option value="i">Inactive</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <!-- On Add User -->
-      <mat-form-field appearance="fill" *ngIf="data.user.action === 'add'">
-        <mat-label>Role</mat-label>
-        <mat-select formControlName="role">
-          <mat-option *ngFor="let role of roles"
-          [value]="role.id">{{role.role}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="fill" *ngIf="data.user.action === 'add'">
-        <mat-label>Status</mat-label>
-        <mat-select formControlName="status">
-          <mat-option value="a">Active</mat-option>
-          <mat-option value="i">Inactive</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div mat-dialog-actions class="text-center">
-        <button mat-stroked-button class="close" (click)="onNoClick()" color="warn">Cancel</button>
-        <mat-spinner-button type="submit" [options]="spinnerButtonOptions" (btnClick)="onSubmit()">
-        </mat-spinner-button>
-    </div>
+<div mat-dialog-content [formGroup]="userForm">
+  <ul class="text-danger" *ngIf="errors.length">
+    <li *ngFor="let error of errors" class="text-error">
+      {{error.msg}}
+    </li>
+  </ul>
+  <mat-form-field appearance="fill">
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name" placeholder="Enter the name">
+    <mat-error *ngIf="getFormControl('name')?.errors?.required">Name is required</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Username</mat-label>
+    <input matInput formControlName="username" placeholder="Enter the username">
+    <mat-error *ngIf="getFormControl('username')?.errors?.required">Username is required</mat-error>
+    <mat-error *ngIf="getFormControl('username')?.errors?.usernameExists">Username already exists</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Password</mat-label>
+    <input matInput type="password" formControlName="password" placeholder="Enter the password">
+    <mat-error *ngIf="getFormControl('password')?.errors?.required">Username is required</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" placeholder="Enter the email">
+    <mat-error *ngIf="getFormControl('email')?.errors?.required">Email is required</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Role</mat-label>
+    <mat-select formControlName="role">
+      <mat-option *ngFor="let role of roles" [value]="role.id">
+        {{role.role}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="getFormControl('role')?.errors?.required">Please select a role</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Status</mat-label>
+    <mat-select formControlName="status">
+      <mat-option *ngFor="let st of status" [value]="st">
+        {{st}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="getFormControl('status')?.errors?.required">Please select a status</mat-error>
+  </mat-form-field>
 </div>
-
-<div class="overlay" *ngIf="loading">
-  <div class="center">
-    <mat-progress-spinner diameter=50 mode="indeterminate" color="ThemePalette">
-    </mat-progress-spinner> 
-  </div>
+<div mat-dialog-actions class="text-center">
+  <button mat-stroked-button class="close" (click)="onNoClick()" color="warn">Cancel</button>
+  <button type="submit" mat-stroked-button (click)="onSubmit()" color="primary" [disabled]="loading">
+    {{data && data.role ? 'Update' : 'Save'}}
+  </button>
 </div>

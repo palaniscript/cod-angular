@@ -14,7 +14,9 @@ export interface User {
     image?: string;
     mobile?: number;
     name?: string;
+    username?: string;
     email?: string;
+    status?: UserStatus;
     notes?: string;
     created?: number;
     modified?: number;
@@ -42,6 +44,11 @@ export interface Site {
     status?: SiteStatus;
     created?: number;
     modified?: number;
+}
+
+export enum UserStatus {
+    ACTIVE = "ACTIVE",
+    INACTIVE = "INACTIVE"
 }
 
 export enum RuleValidationStatus {
