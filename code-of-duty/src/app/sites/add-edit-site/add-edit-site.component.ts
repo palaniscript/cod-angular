@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ErrorMessage, Site } from 'src/app/shared/model';
 import { NotificationsService } from 'src/notifications.service';
 import { SitesService } from '../sites/sites.service';
+
 @Component({
   selector: 'app-add-edit-site',
   templateUrl: './add-edit-site.component.html',
@@ -27,6 +28,7 @@ export class AddEditSiteComponent implements OnInit {
     this.siteForm = this.fb.group({
       siteId: ['', [Validators.required]],
       siteName: ['',[Validators.required]],
+      aeId: ['',[Validators.required]],
       cewisId: ['',[Validators.required]],
       status: ['',[Validators.required]]
     });
@@ -42,6 +44,7 @@ export class AddEditSiteComponent implements OnInit {
       this.siteForm.patchValue({
          siteId: response.siteId,
          siteName: response.siteName,
+         aeId:response.aeId,
          cewisId:response.cewisId,
          status:response.status
       });

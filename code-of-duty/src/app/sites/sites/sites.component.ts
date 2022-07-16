@@ -17,7 +17,7 @@ import { AddEditSiteComponent } from '../add-edit-site/add-edit-site.component';
 })
 export class SitesComponent implements OnInit {
 
-  public displayedColumns: string[] = ['siteId', 'siteName', 'cewisId','status','action'];
+  public displayedColumns: string[] = ['siteId', 'siteName', 'aeId', 'cewisId','status','action'];
   public pageSizeOptions: number[] = environment.pageSizeOptions;
   public dataSource: MatTableDataSource<Site>;
   public columns: { header: string; columnDef: string; }[];

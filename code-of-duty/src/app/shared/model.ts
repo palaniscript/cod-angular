@@ -37,6 +37,7 @@ export interface Site {
     id?: number,
     siteId?: string;
     siteName?: string;
+    aeId?: Number;
     cewisId?: string;
     status?: SiteStatus;
     created?: number;
