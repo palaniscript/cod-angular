@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { User } from 'src/app/shared/model';
 import { environment } from 'src/environments/environment';
 import { LoaderService } from 'src/loader.service';
 import { LoginService } from '../../shared/login.service';
@@ -10,7 +11,7 @@ import { LoginService } from '../../shared/login.service';
   templateUrl: './site-header.component.html',
 })
 export class SiteHeaderComponent implements OnInit {
-
+  user: User;
   loading: boolean;
   appTitle: string;
   isFullScreen = false;
@@ -30,6 +31,9 @@ export class SiteHeaderComponent implements OnInit {
       setTimeout(() => {
         this.loading = v;
       });
+    });
+    this.loginService.user.subscribe(user => {
+      this.user = user;
     });
   }
 

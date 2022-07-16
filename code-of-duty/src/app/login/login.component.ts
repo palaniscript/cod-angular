@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { first } from 'rxjs/operators';
 import { AlertService } from '../shared/alert.service';
 import { LoginService } from '../shared/login.service';
 
@@ -43,7 +42,6 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.loginService
       .login(this.loginForm.value.username, this.loginForm.value.password)
-      .pipe(first())
       .subscribe(
         (data) => {
           this.router.navigate(['dashboard']);

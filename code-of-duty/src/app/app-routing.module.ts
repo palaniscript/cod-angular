@@ -3,10 +3,17 @@ import { RouterModule, Routes } from '@angular/router';
 import { SiteLayoutComponent } from './layout/site-layout/site-layout.component';
 import { LoginComponent } from './login/login.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { AlertComponent } from './alert/alert.component';
 
 const routes: Routes = [
-  { path: '', component: LoginComponent},
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'dashboard'
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
   {
     path: 'dashboard',
     component: SiteLayoutComponent,

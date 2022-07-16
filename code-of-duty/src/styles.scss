@@ -20,10 +20,11 @@ body {
   .mat-stroked-button {
     margin: 0 5px;
     border: none;
+
     &:hover {
       background-color: #fff;
       text-decoration: none;
-    }    
+    }
   }
 }
 
@@ -63,5 +64,13 @@ table,
     align-items: center;
     gap: 15px;
     height: 30px;
+  }
+}
+
+.welcome-text {
+  font-size: 14px;
+
+  span {
+    text-decoration: underline;
   }
 }

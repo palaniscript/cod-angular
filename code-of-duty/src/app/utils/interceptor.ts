@@ -1,7 +1,6 @@
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
 import { environment } from '../../environments/environment';
 import { LoginService } from '../shared/login.service';
 
@@ -16,9 +15,8 @@ export class JwtInterceptor implements HttpInterceptor {
         if (isLoggedIn && isApiUrl) {
             request = request.clone({
                 setHeaders: {
-                    //Authorization: `Bearer ${user.accessToken}`,
+                    'x-access-token': user.accessToken,
                     'Content-Type': 'application/json',
-                    'x-access-token': '${user.accessToken}'
                 }
             });
         }
