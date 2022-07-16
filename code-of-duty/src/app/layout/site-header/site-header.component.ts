@@ -3,6 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { LoaderService } from 'src/loader.service';
+import { LoginService } from '../../shared/login.service';
 
 @Component({
   selector: 'app-site-header',
@@ -18,6 +19,7 @@ export class SiteHeaderComponent implements OnInit {
     // private sidenav: SidenavService,
     private router: Router,
     private loaderService: LoaderService,
+    private loginService: LoginService,
     public titleService: Title) {
     this.appTitle = environment.appTitle;
   }
@@ -89,7 +91,7 @@ export class SiteHeaderComponent implements OnInit {
   }
 
   logout() {
-    this.router.navigate(['login']);
+    this.loginService.logout();
   }
 
   navigate(url) {

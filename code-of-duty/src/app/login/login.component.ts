@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { LoginService } from '../shared/login.service';
+import { AlertService } from '../shared/alert.service';
 
 @Component({ templateUrl: 'login.component.html' })
 export class LoginComponent implements OnInit { 
@@ -17,12 +18,9 @@ export class LoginComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private loginService: LoginService,
+        private alertService: AlertService,
         
     ) {
-        // redirect to home if already logged in
-       /* if (this.accountService.userValue) {
-            this.router.navigate(['/']);
-        }*/
     }
 
     ngOnInit() {
@@ -31,12 +29,10 @@ export class LoginComponent implements OnInit {
             password: ['', Validators.required]
         });
     }
-    ngAfterViewInit() {
-        console.log(this.f);
-    }
     get f() { return this.loginForm.controls; }
     onSubmit() {
         this.submitted = true;
+        this.alertService.clear();
         if (this.loginForm.invalid) {
             return;
         }
@@ -49,7 +45,8 @@ export class LoginComponent implements OnInit {
                     this.router.navigate(['dashboard']);
                 },
                 error => {
-                   this.loading = false;
+                    this.alertService.error(error.error.message);
+                    this.loading = false;
                 });
     }
 }

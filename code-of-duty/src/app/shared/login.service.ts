@@ -35,4 +35,11 @@ export class LoginService {
             }));
     }
 
+    logout() {
+        localStorage.removeItem('user');
+        this.userSubject.next({});
+        this.router.navigate(['login']);
+    }
+
+
 }
