@@ -84,20 +84,18 @@ export class AddEditUserComponent implements OnInit {
     if (this.userForm.valid) {
       this.loading = true;
       if (this.data.user !== null) {
-        setTimeout(() => {
-          const userData = this.userForm.value;
-          // Update password only if changed
-          if (userData.password === this.fetchedUser.password) {
-            delete userData.password;
-          }
-          this.usersService.updateUser(userData, this.data.user).subscribe((response: User) => {
-            this.loading = false;
-            this.notification.success('User updated successfully');
-            this.dialogRef.close({ response: true });
-          }, error => {
-            this.notification.error('Unable to update the user')
-          });
-        }, 5000);
+        const userData = this.userForm.value;
+        // Update password only if changed
+        if (userData.password === this.fetchedUser.password) {
+          delete userData.password;
+        }
+        this.usersService.updateUser(userData, this.data.user).subscribe((response: User) => {
+          this.loading = false;
+          this.notification.success('User updated successfully');
+          this.dialogRef.close({ response: true });
+        }, error => {
+          this.notification.error('Unable to update the user')
+        });
       } else {
         this.usersService.createUser(this.userForm.value).subscribe((response: User) => {
           this.loading = false;

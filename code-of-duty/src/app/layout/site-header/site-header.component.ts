@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Router } from '@angular/router';
 import { User } from 'src/app/shared/model';
 import { environment } from 'src/environments/environment';
 import { LoaderService } from 'src/loader.service';
@@ -17,8 +16,6 @@ export class SiteHeaderComponent implements OnInit {
   isFullScreen = false;
 
   constructor(
-    // private sidenav: SidenavService,
-    private router: Router,
     private loaderService: LoaderService,
     private loginService: LoginService,
     public titleService: Title) {
@@ -37,12 +34,7 @@ export class SiteHeaderComponent implements OnInit {
     });
   }
 
-  toggleRightSidenav() {
-    // this.sidenav.toggle();
-  }
-
   toggleFullScreen() {
-    console.log('toggleFullScreen');
     this.isFullScreen ? this.closefullscreen() : this.openfullscreen();
   }
 
@@ -97,9 +89,4 @@ export class SiteHeaderComponent implements OnInit {
   logout() {
     this.loginService.logout();
   }
-
-  navigate(url) {
-    this.router.navigate([url]);
-  }
-
 }

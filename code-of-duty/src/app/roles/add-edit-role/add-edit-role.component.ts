@@ -63,15 +63,13 @@ export class AddEditRoleComponent implements OnInit {
     if (this.roleForm.valid) {
       this.loading = true;
       if (this.data.role !== null) {
-        setTimeout(() => {
-          this.rolesService.updateRole(this.roleForm.value, this.data.role).subscribe((response: Role) => {
-            this.loading = false;
-            this.notification.success('Role updated successfully');
-            this.dialogRef.close({ response: true });
-          }, error => {
-            this.notification.error('Unable to update the role')
-          });
-        }, 5000);
+        this.rolesService.updateRole(this.roleForm.value, this.data.role).subscribe((response: Role) => {
+          this.loading = false;
+          this.notification.success('Role updated successfully');
+          this.dialogRef.close({ response: true });
+        }, error => {
+          this.notification.error('Unable to update the role')
+        });
       } else {
         this.rolesService.createRole(this.roleForm.value).subscribe((response: Role) => {
           this.loading = false;

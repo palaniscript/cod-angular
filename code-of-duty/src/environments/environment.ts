@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  appTitle: 'Code of Duty',
+  appTitle: 'Super Triage',
   pageSizeOptions: [5, 10, 25, 100],
   apiUrl: 'http://localhost:8080/api/',
   aeUrl: 'http://localhost:8081/api/',

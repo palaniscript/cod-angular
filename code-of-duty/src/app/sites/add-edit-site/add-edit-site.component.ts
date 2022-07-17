@@ -27,10 +27,10 @@ export class AddEditSiteComponent implements OnInit {
   ngOnInit() {
     this.siteForm = this.fb.group({
       siteId: ['', [Validators.required]],
-      siteName: ['',[Validators.required]],
-      aeId: ['',[Validators.required]],
-      cewisId: ['',[Validators.required]],
-      status: ['',[Validators.required]]
+      siteName: ['', [Validators.required]],
+      aeId: ['', [Validators.required]],
+      cewisId: ['', [Validators.required]],
+      status: ['', [Validators.required]]
     });
     if (this.data.site !== null) {
       this.fetchSite();
@@ -42,11 +42,11 @@ export class AddEditSiteComponent implements OnInit {
     this.sitesService.getSite(this.data.site.id).subscribe((response: Site) => {
       this.loading = false;
       this.siteForm.patchValue({
-         siteId: response.siteId,
-         siteName: response.siteName,
-         aeId:response.aeId,
-         cewisId:response.cewisId,
-         status:response.status
+        siteId: response.siteId,
+        siteName: response.siteName,
+        aeId: response.aeId,
+        cewisId: response.cewisId,
+        status: response.status
       });
     },
       error => {
@@ -68,15 +68,13 @@ export class AddEditSiteComponent implements OnInit {
     if (this.siteForm.valid) {
       this.loading = true;
       if (this.data.site !== null) {
-        setTimeout(() => {
-          this.sitesService.updateSite(this.siteForm.value, this.data.site).subscribe((response: Site) => {
-            this.loading = false;
-            this.notification.success('Site updated successfully');
-            this.dialogRef.close({ response: true });
-          }, error => {
-            this.notification.error('Unable to update the site')
-          });
-        }, 5000);
+        this.sitesService.updateSite(this.siteForm.value, this.data.site).subscribe((response: Site) => {
+          this.loading = false;
+          this.notification.success('Site updated successfully');
+          this.dialogRef.close({ response: true });
+        }, error => {
+          this.notification.error('Unable to update the site')
+        });
       } else {
         this.sitesService.createSite(this.siteForm.value).subscribe((response: Site) => {
           this.loading = false;

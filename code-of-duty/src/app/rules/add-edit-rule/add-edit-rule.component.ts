@@ -32,7 +32,7 @@ export class AddEditRuleComponent implements OnInit {
     private readonly rulesService: RulesService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private readonly fb: FormBuilder
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.ruleForm = this.fb.group({
@@ -114,20 +114,18 @@ export class AddEditRuleComponent implements OnInit {
     if (this.ruleForm.valid) {
       this.loading = true;
       if (this.data.rule !== null) {
-        setTimeout(() => {
-          this.rulesService
-            .updateRule(this.ruleForm.value, this.data.rule)
-            .subscribe(
-              (response: Rule) => {
-                this.loading = false;
-                this.notification.success('Rule updated successfully');
-                this.dialogRef.close({ response: true });
-              },
-              (error) => {
-                this.notification.error('Unable to update the rule');
-              }
-            );
-        }, 5000);
+        this.rulesService
+          .updateRule(this.ruleForm.value, this.data.rule)
+          .subscribe(
+            (response: Rule) => {
+              this.loading = false;
+              this.notification.success('Rule updated successfully');
+              this.dialogRef.close({ response: true });
+            },
+            (error) => {
+              this.notification.error('Unable to update the rule');
+            }
+          );
       } else {
         this.rulesService.createRule(this.ruleForm.value).subscribe(
           (response: Rule) => {

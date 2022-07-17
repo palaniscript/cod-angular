@@ -23,8 +23,8 @@
     </mat-form-field>
 </div>
 <div mat-dialog-actions class="text-center">
-    <button mat-stroked-button class="close" (click)="onNoClick()" color="warn">Cancel</button>
-    <button type="submit" mat-stroked-button (click)="onSubmit()" color="primary" [disabled]="loading">
+    <button type="submit" mat-raised-button (click)="onSubmit()" color="primary" [disabled]="loading">
         {{data && data.role ? 'Update' : 'Save'}}
     </button>
+    <button mat-stroked-button class="close" (click)="onNoClick()" color="warn">Cancel</button>    
 </div>

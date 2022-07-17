@@ -8,6 +8,12 @@
         <a mat-stroked-button [routerLink]="'/sites'" [routerLinkActive]="'mat-accent active-menu'">Sites</a>
         <a mat-stroked-button [routerLink]="'/triage'" [routerLinkActive]="'mat-accent active-menu'">Triage</a>
     </div>
+    &nbsp;&nbsp;
+    <button mat-icon-button (click)="toggleFullScreen()"
+        matTooltip="{{isFullScreen ? 'Exit Fullscreen' : 'Fullscreen'}}">
+        <mat-icon>{{isFullScreen ? 'fullscreen_exit' : 'fullscreen'}}</mat-icon>
+    </button>
+    &nbsp;&nbsp;
     <div class="welcome-text">Welcome, <span>{{user.name}}</span></div>
     <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>person_pin</mat-icon>
