@@ -1,5 +1,5 @@
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { SiteLayoutComponent } from './site-layout.component';
 
 describe('SiteLayoutComponent', () => {
@@ -8,7 +8,8 @@ describe('SiteLayoutComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SiteLayoutComponent ]
+      declarations: [ SiteLayoutComponent ],
+      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
 

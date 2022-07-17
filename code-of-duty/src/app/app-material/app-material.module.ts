@@ -39,7 +39,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatDialogModule,
     MatTableModule,
     MatPaginatorModule,
-    MatDialogModule,
     MatSelectModule,
     MatFormFieldModule,
     MatInputModule,
