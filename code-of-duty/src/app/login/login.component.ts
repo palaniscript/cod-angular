@@ -15,10 +15,10 @@ export class LoginComponent implements OnInit {
   returnUrl: string;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private loginService: LoginService,
-    private alertService: AlertService
+    private readonly formBuilder: FormBuilder,
+    private readonly router: Router,
+    private readonly loginService: LoginService,
+    private readonly alertService: AlertService
   ) {}
 
   ngOnInit() {

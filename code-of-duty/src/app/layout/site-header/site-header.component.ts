@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { User } from 'src/app/shared/model';
 import { environment } from 'src/environments/environment';
-import { LoaderService } from 'src/loader.service';
 import { LoginService } from '../../shared/login.service';
 
 @Component({
@@ -11,24 +10,17 @@ import { LoginService } from '../../shared/login.service';
 })
 export class SiteHeaderComponent implements OnInit {
   user: User;
-  loading: boolean;
   appTitle: string;
   isFullScreen = false;
 
   constructor(
-    private loaderService: LoaderService,
-    private loginService: LoginService,
-    public titleService: Title) {
+    private readonly loginService: LoginService,
+    public readonly titleService: Title) {
     this.appTitle = environment.appTitle;
   }
 
   ngOnInit() {
     this.chkScreenMode();
-    this.loaderService.isLoading.subscribe((v) => {
-      setTimeout(() => {
-        this.loading = v;
-      });
-    });
     this.loginService.user.subscribe(user => {
       this.user = user;
     });

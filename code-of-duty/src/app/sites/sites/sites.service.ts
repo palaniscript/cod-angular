@@ -12,7 +12,6 @@ export class SitesService {
   constructor(private readonly http: HttpClient) { }
 
   getSites(site?): Observable<Site[]> {
-    console.log("getsites",site)
     if (!site) {
       return this.http.get<Site[]>(environment.apiUrl + 'sites');
     } else {
@@ -25,13 +24,10 @@ export class SitesService {
   }
 
   createSite(site: Site): Observable<Site> {
-    console.log("create site")
-    console.log(site)
     return this.http.post<Site>(environment.apiUrl + 'sites', site);
   }
 
   updateSite(siteData: Site, site: Site): Observable<Site> {
-    console.log("service",siteData,site)
     return this.http.put<Site>(environment.apiUrl + 'sites/' + site.id, siteData);
   }
 

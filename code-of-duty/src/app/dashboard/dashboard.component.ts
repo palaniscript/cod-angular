@@ -48,7 +48,6 @@ export class DashboardComponent implements OnInit {
   loadSummary() {
     this.getData()
       .subscribe(response => {
-        console.log(response);
         this.summaryData = {
           totalUsers: response[0].length,
           totalSites: response[1].length,

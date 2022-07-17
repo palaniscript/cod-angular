@@ -9,8 +9,7 @@ import { RulesService } from '../rules.service';
 
 @Component({
   selector: 'app-add-edit-rule',
-  templateUrl: './add-edit-rule.component.html',
-  styleUrls: ['./add-edit-rule.component.scss'],
+  templateUrl: './add-edit-rule.component.html'
 })
 export class AddEditRuleComponent implements OnInit {
   public ruleForm: FormGroup;

@@ -76,25 +76,3 @@ export interface apiResponse {
     message?: string | ErrorMessage[];
     response?: boolean | string;
 }
-
-export interface UsersResponse extends apiResponse {
-    data?: User[]
-}
-
-export interface UserResponse extends apiResponse {
-    role: any;
-    data?: User
-}
-
-export interface RolesResponse extends apiResponse {
-    data?: Role[]
-}
-
-export interface LoginResponse extends apiResponse {
-    accessToken?: string;
-    refreshToken?: string;
-}
-
-export interface SettingsResponse extends apiResponse {
-
-}

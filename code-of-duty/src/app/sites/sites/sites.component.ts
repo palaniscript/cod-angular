@@ -4,16 +4,15 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmDialogComponent, ConfirmDialogModel } from 'src/app/confirm-dialog/confirm-dialog.component';
-import { SitesService } from 'src/app/sites/sites/sites.service';
 import { Site } from 'src/app/shared/model';
+import { SitesService } from 'src/app/sites/sites/sites.service';
 import { environment } from 'src/environments/environment';
 import { NotificationsService } from 'src/notifications.service';
 import { AddEditSiteComponent } from '../add-edit-site/add-edit-site.component';
 
 @Component({
   selector: 'app-sites',
-  templateUrl: './sites.component.html',
-  styleUrls: ['./sites.component.scss']
+  templateUrl: './sites.component.html'
 })
 export class SitesComponent implements OnInit {
 

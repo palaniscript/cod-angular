@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { MatListOption } from '@angular/material/list';
 import { map, Observable, startWith } from 'rxjs';
 import { NotificationsService } from 'src/notifications.service';
@@ -21,7 +20,6 @@ export class TriageComponent implements OnInit {
   selectedRules: Rule[];
 
   constructor(
-    private readonly dialog: MatDialog,
     private readonly rulesService: RulesService,
     private readonly sitesService: SitesService,
     private readonly notification: NotificationsService
@@ -89,7 +87,6 @@ export class TriageComponent implements OnInit {
     const rules = this.selectedRules;
     let selectedSite = this.siteControl.value;
     rules.forEach((rule) => {
-      console.log('validate', rule);
       if (rule.checkType === 'count') {
         rule.status = RuleValidationStatus.INPROGRESS;
         let endPoint = rule.endPoint;

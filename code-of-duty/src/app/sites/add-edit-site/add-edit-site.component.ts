@@ -20,7 +20,7 @@ export class AddEditSiteComponent implements OnInit {
     private readonly notification: NotificationsService,
     private readonly sitesService: SitesService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private fb: FormBuilder
+    private readonly fb: FormBuilder
   ) {
   }
 
