@@ -11,7 +11,7 @@
             {{error.msg}}
         </li>
     </ul>
-    <form [formGroup]="roleForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="roleForm" id="roleForm" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="fill">
             <mat-label>Role</mat-label>
             <input matInput formControlName="role" placeholder="Enter the role name">
