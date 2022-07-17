@@ -30,7 +30,7 @@ export interface Role {
     modified?: number;
 }
 
-enum SiteStatus {
+export enum SiteStatus {
     Open = 'o',
     Completed = 'c'
 }
@@ -42,8 +42,8 @@ export interface Site {
     aeId?: Number;
     cewisId?: string;
     status?: SiteStatus;
-    created?: number;
-    modified?: number;
+    createdAt?: number;
+    updatedAt?: number;
 }
 
 export enum UserStatus {

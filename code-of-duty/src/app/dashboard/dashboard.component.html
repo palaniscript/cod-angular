@@ -1,1 +1,87 @@
-<p>dashboard works!</p>
+<div class="page-header justify-content-between align-items-center">
+    <div class="start">
+        <div class="title">
+            <h2>Welcome to {{appTitle}} Dashboard</h2>
+        </div>
+    </div>
+</div>
+
+<div class="tiles-container">
+    <mat-card>
+        <mat-card-title>Total Users</mat-card-title>
+        <mat-card-content>
+            <p class="tile-count">{{summaryData.totalUsers}}</p>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card class="example-card">
+        <mat-card-title>Total Sites</mat-card-title>
+        <mat-card-content>
+            <p class="tile-count">{{summaryData.totalSites}}</p>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card class="example-card">
+        <mat-card-title>Completed Sites</mat-card-title>
+        <mat-card-content>
+            <p class="tile-count">{{summaryData.completedSites}}</p>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card class="example-card">
+        <mat-card-title>Total Rules</mat-card-title>
+        <mat-card-content>
+            <p class="tile-count">{{summaryData.totalRules}}</p>
+        </mat-card-content>
+    </mat-card>
+</div>
+
+<br /><br />
+<h2>Recent Sites</h2>
+<div class="mat-elevation-z8 recent-sites">
+    <table mat-table [dataSource]="dataSource">
+
+        <!-- site ID Column -->
+        <ng-container matColumnDef="siteId">
+            <th mat-header-cell *matHeaderCellDef> Site ID </th>
+            <td mat-cell *matCellDef="let element"> {{element.siteId}} </td>
+        </ng-container>
+
+        <!-- site name Column -->
+        <ng-container matColumnDef="siteName">
+            <th mat-header-cell *matHeaderCellDef> Site Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.siteName}} </td>
+        </ng-container>
+
+        <!-- AE id Column -->
+        <ng-container matColumnDef="aeId">
+            <th mat-header-cell *matHeaderCellDef> AE ID </th>
+            <td mat-cell *matCellDef="let element"> {{element.aeId}} </td>
+        </ng-container>
+
+        <!-- cewis id Column -->
+        <ng-container matColumnDef="cewisId">
+            <th mat-header-cell *matHeaderCellDef> CEWIS ID </th>
+            <td mat-cell *matCellDef="let element"> {{element.cewisId}} </td>
+        </ng-container>
+
+        <!-- status Column -->
+        <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef> Status </th>
+            <td mat-cell *matCellDef="let element">
+                <div *ngIf="element.status === 'o'">Open</div>
+                <div *ngIf="element.status === 'c'">Completed</div>
+        </ng-container>
+
+        <!-- action Column -->
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Actions </th>
+            <td mat-cell *matCellDef="let element">
+                <mat-icon class="mr-2" color="primary">edit</mat-icon> &nbsp;
+                <mat-icon class="mr-2" color="warn">delete</mat-icon>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>

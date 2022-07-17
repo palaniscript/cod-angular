@@ -1,0 +1,25 @@
+.tiles-container {
+    display: flex;
+    flex-wrap: wrap;
+
+    .mat-card {
+        flex: 1 0 21%;
+        margin: 5px;
+        padding: 0 15px;
+        border-radius: 5px;
+
+        .mat-card-title {
+            margin: 0;
+        }
+
+        .tile-count {
+            padding: 40px 0;
+            font-size: 35px;
+        }
+    }
+}
+
+.recent-sites {
+    padding: 0 20px;
+    margin-bottom: 20px;
+}
