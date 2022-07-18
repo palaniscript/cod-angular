@@ -20,12 +20,13 @@
     <mat-label>Username</mat-label>
     <input matInput formControlName="username" placeholder="Enter the username">
     <mat-error *ngIf="getFormControl('username')?.errors?.required">Username is required</mat-error>
+    <mat-error *ngIf="getFormControl('username')?.errors?.cannotContainSpace">Username cannot have space</mat-error>
     <mat-error *ngIf="getFormControl('username')?.errors?.usernameExists">Username already exists</mat-error>
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>Password</mat-label>
     <input matInput type="password" formControlName="password" placeholder="Enter the password">
-    <mat-error *ngIf="getFormControl('password')?.errors?.required">Username is required</mat-error>
+    <mat-error *ngIf="getFormControl('password')?.errors?.required">Password is required</mat-error>
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>Email</mat-label>
@@ -55,5 +56,5 @@
   <button type="submit" mat-raised-button (click)="onSubmit()" color="primary" [disabled]="loading">
     {{data && data.role ? 'Update' : 'Save'}}
   </button>
-  <button mat-stroked-button class="close" (click)="onNoClick()" color="warn">Cancel</button>  
+  <button mat-stroked-button class="close" (click)="onNoClick()" color="warn">Cancel</button>
 </div>

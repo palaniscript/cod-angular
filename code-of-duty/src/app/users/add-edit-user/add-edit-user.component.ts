@@ -5,6 +5,7 @@ import { RolesService } from "src/app/roles/roles/roles.service";
 import { ErrorMessage, Role, User } from "src/app/shared/model";
 import { NotificationsService } from "src/notifications.service";
 import { existingUsernameValidator } from '../custom-validators/existing-username-validator';
+import { UsernameSpaceValidator } from "../custom-validators/username-sapce-validator";
 import { UsersService } from "../users.service";
 
 @Component({
@@ -34,7 +35,7 @@ export class AddEditUserComponent implements OnInit {
     this.fetchRoles();
     this.userForm = this.fb.group({
       name: ['', [Validators.required]],
-      username: ['', [Validators.required], [existingUsernameValidator(this.usersService, this.data.user)]],
+      username: ['', [Validators.required, UsernameSpaceValidator.cannotContainSpace], [existingUsernameValidator(this.usersService, this.data.user)]],
       password: ['', [Validators.required]],
       email: ['', [Validators.required]],
       role: ['', [Validators.required]],

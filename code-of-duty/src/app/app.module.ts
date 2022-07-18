@@ -5,6 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AlertComponent } from './alert/alert.component';
 import { AppMaterialModule } from './app-material/app-material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,7 +15,7 @@ import { SiteLayoutComponent } from './layout/site-layout/site-layout.component'
 import { LoginComponent } from './login/login.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ProfileComponent } from './profile/profile.component';
-import { AlertComponent } from './alert/alert.component';
+import { LoaderComponent } from './shared/loader/loader.component';
 import { JwtInterceptor } from './utils/interceptor';
 
 @NgModule({
@@ -26,7 +27,8 @@ import { JwtInterceptor } from './utils/interceptor';
     SiteLayoutComponent,
     SiteHeaderComponent,
     ConfirmDialogComponent,
-    AlertComponent
+    AlertComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
