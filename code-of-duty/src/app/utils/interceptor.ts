@@ -1,6 +1,6 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { finalize, Observable } from 'rxjs';
+import { catchError, finalize, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { LoaderService } from '../shared/loader.service';
 import { LoginService } from '../shared/login.service';
@@ -9,7 +9,7 @@ import { LoginService } from '../shared/login.service';
 export class JwtInterceptor implements HttpInterceptor {
     constructor(
         private readonly loginService: LoginService,
-        private readonly loaderService: LoaderService
+        private readonly loaderService: LoaderService,
     ) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -27,6 +27,12 @@ export class JwtInterceptor implements HttpInterceptor {
             });
         }
         return next.handle(request).pipe(
+            catchError((err: HttpErrorResponse) => {
+                if (err.status == 401) {
+                    this.loginService.logout();
+                }
+                return throwError(err);
+            }),
             finalize(() => this.loaderService.hide()),
         );
     }
