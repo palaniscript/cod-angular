@@ -68,6 +68,10 @@ export interface Rule {
     checkType?: string;
     source?: string;
     response?: string;
+    query?: string;
+    sqlCheckType?: string;
+    sqlSource?: string;
+    sqlResponse?: string;
     status?: RuleValidationStatus;
 }
 

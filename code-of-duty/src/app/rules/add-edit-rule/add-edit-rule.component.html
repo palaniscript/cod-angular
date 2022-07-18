@@ -41,7 +41,7 @@
         </mat-select>
         <mat-error *ngIf="getFormControl('checkType')?.errors?.required">Please select a type</mat-error>
     </mat-form-field>
-    <ng-container *ngIf="showMatchingFields">
+    <ng-container *ngIf="showDataValidationFields">
         <mat-form-field appearance="fill">
             <mat-label>Source Property</mat-label>
             <input matInput formControlName="source" placeholder="Enter the source">
@@ -54,10 +54,41 @@
             <mat-error *ngIf="getFormControl('response')?.errors?.required">Response is required</mat-error>
         </mat-form-field>
     </ng-container>
+
+    <!-- SQL rule related fields -->
+    <mat-form-field appearance="fill" *ngIf="showSqlOptions">
+        <mat-label>SQL Query</mat-label>
+        <textarea matInput formControlName="query" placeholder="Enter the query"></textarea>
+        <mat-hint>You can use siteId, siteName, cewisId as params. use &#123; &#125; for including params</mat-hint>
+        <mat-error *ngIf="getFormControl('query')?.errors?.required">Query is required</mat-error>
+        <mat-error *ngIf="getFormControl('query')?.errors?.wrongQuery">Invalid Query</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" *ngIf="showSqlOptions">
+        <mat-label>Check Type</mat-label>
+        <mat-select formControlName="sqlCheckType" (selectionChange)="onSqlCheckTypeChange($event)">
+            <mat-option *ngFor="let type of sqlCheckTypes" [value]="type.value">
+                {{type.viewValue}}
+            </mat-option>
+        </mat-select>
+        <mat-error *ngIf="getFormControl('sqlCheckType')?.errors?.required">Please select a type</mat-error>
+    </mat-form-field>
+    <ng-container *ngIf="showSqlDataValidationFields">
+        <mat-form-field appearance="fill">
+            <mat-label>Source Property</mat-label>
+            <input matInput formControlName="sqlSource" placeholder="Enter the source">
+            <mat-hint>Ex: siteId, siteName, cewisId</mat-hint>
+            <mat-error *ngIf="getFormControl('sqlSource')?.errors?.required">Source is required</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Response Property</mat-label>
+            <input matInput formControlName="sqlResponse" placeholder="Enter the response">
+            <mat-error *ngIf="getFormControl('sqlResponse')?.errors?.required">Response is required</mat-error>
+        </mat-form-field>
+    </ng-container>
 </div>
 <div mat-dialog-actions class="text-center">
     <button type="submit" mat-raised-button (click)="onSubmit()" color="primary" [disabled]="loading">
         {{data && data.rule ? 'Update' : 'Save'}}
     </button>
-    <button mat-stroked-button class="close" (click)="onNoClick()" color="warn">Cancel</button>    
+    <button mat-stroked-button class="close" (click)="onNoClick()" color="warn">Cancel</button>
 </div>

@@ -5,6 +5,7 @@ import { Rule } from 'src/app/shared/model';
 import { environment } from 'src/environments/environment';
 import { NotificationsService } from 'src/notifications.service';
 import { existingRuleValidator } from '../custom-validators/existing-rule-validator';
+import { invalidQueryValidator } from '../custom-validators/invalid-query-validator';
 import { RulesService } from '../rules.service';
 
 @Component({
@@ -15,12 +16,19 @@ export class AddEditRuleComponent implements OnInit {
   public ruleForm: FormGroup;
   public loading = false;
   public showEndPoint = false;
-  public showMatchingFields = false;
+  public showSqlOptions = false;
+  public showDataValidationFields = false;
+  public showSqlDataValidationFields = false;
   public systems = [
     { value: 'ae', viewValue: 'Also Energy' },
     { value: 'cewis', viewValue: 'CEWIS' },
+    { value: 'pg', viewValue: 'Postgres' },
   ];
   public checkTypes = [
+    { value: 'count', viewValue: 'Has Data' },
+    { value: 'data', viewValue: 'Validate Data' },
+  ];
+  public sqlCheckTypes = [
     { value: 'count', viewValue: 'Has Data' },
     { value: 'data', viewValue: 'Validate Data' },
   ];
@@ -46,6 +54,10 @@ export class AddEditRuleComponent implements OnInit {
       checkType: ['', [Validators.required]],
       source: ['', [Validators.required]],
       response: ['', [Validators.required]],
+      query: ['', [Validators.required, invalidQueryValidator()]],
+      sqlCheckType: ['', [Validators.required]],
+      sqlSource: ['', [Validators.required]],
+      sqlResponse: ['', [Validators.required]]
     });
     if (this.data.rule !== null) {
       this.fetchRule();
@@ -56,15 +68,28 @@ export class AddEditRuleComponent implements OnInit {
     this.showEndPoint = event.value === 'ae' || event.value === 'cewis';
     if (this.ruleForm.value.endPoint === '') {
       if (event.value === 'ae') {
+        this.showSqlOptions = false;
         this.ruleForm.patchValue({ endPoint: environment.aeUrl });
       } else if (event.value === 'cewis') {
+        this.showSqlOptions = false;
         this.ruleForm.patchValue({ endPoint: environment.cewisUrl });
+      } else {
+        this.showSqlOptions = true;
+        this.ruleForm.patchValue({ endPoint: '' });
+        this.ruleForm.controls['endPoint'].clearValidators();
+        this.ruleForm.controls['checkType'].clearValidators();
+        this.ruleForm.controls['source'].clearValidators();
+        this.ruleForm.controls['response'].clearValidators();
+        this.ruleForm.controls['endPoint'].updateValueAndValidity();
+        this.ruleForm.controls['checkType'].updateValueAndValidity();
+        this.ruleForm.controls['source'].updateValueAndValidity();
+        this.ruleForm.controls['response'].updateValueAndValidity();
       }
     }
   }
 
   onCheckTypeChange(event) {
-    this.showMatchingFields = event.value === 'data';
+    this.showDataValidationFields = event.value === 'data';
     if (event.value === 'data') {
       this.ruleForm.controls.source.setValidators([Validators.required]);
       this.ruleForm.controls.response.setValidators([Validators.required]);
@@ -73,6 +98,20 @@ export class AddEditRuleComponent implements OnInit {
       this.ruleForm.controls['response'].clearValidators();
       this.ruleForm.controls['source'].updateValueAndValidity();
       this.ruleForm.controls['response'].updateValueAndValidity();
+    }
+    this.ruleForm.updateValueAndValidity();
+  }
+
+  onSqlCheckTypeChange(event) {
+    this.showSqlDataValidationFields = event.value === 'data';
+    if (event.value === 'data') {
+      this.ruleForm.controls.sqlSource.setValidators([Validators.required]);
+      this.ruleForm.controls.sqlResponse.setValidators([Validators.required]);
+    } else {
+      this.ruleForm.controls['sqlSource'].clearValidators();
+      this.ruleForm.controls['sqlResponse'].clearValidators();
+      this.ruleForm.controls['sqlSource'].updateValueAndValidity();
+      this.ruleForm.controls['sqlResponse'].updateValueAndValidity();
     }
     this.ruleForm.updateValueAndValidity();
   }
@@ -90,9 +129,14 @@ export class AddEditRuleComponent implements OnInit {
           checkType: response.checkType,
           source: response.source,
           response: response.response,
+          query: response.query,
+          sqlCheckType: response.sqlCheckType,
+          sqlSource: response.sqlSource,
+          sqlResponse: response.sqlResponse,
         });
         this.onSystemChange({ value: response.system });
         this.onCheckTypeChange({ value: response.checkType });
+        this.onSqlCheckTypeChange({ value: response.sqlCheckType });
       },
       (error) => {
         this.notification.error('Unable to fetch rule details');

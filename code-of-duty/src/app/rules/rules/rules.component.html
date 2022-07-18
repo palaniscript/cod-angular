@@ -24,7 +24,8 @@
         <!-- checkType Column -->
         <ng-container matColumnDef="checkType">
             <th mat-header-cell *matHeaderCellDef> Check Type </th>
-            <td mat-cell *matCellDef="let element"> {{element.checkType}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.system === 'pg' ? element.sqlCheckType :
+                element.checkType}} </td>
         </ng-container>
 
         <!-- system Column -->

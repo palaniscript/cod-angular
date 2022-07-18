@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppMaterialModule } from '../app-material/app-material.module';
 import { TriageRoutingModule } from './triage-routing.module';
 import { TriageComponent } from './triage.component';
@@ -14,6 +14,7 @@ import { TriageComponent } from './triage.component';
     CommonModule,
     TriageRoutingModule,
     HttpClientModule,
+    FormsModule,
     ReactiveFormsModule,
     AppMaterialModule
   ]

@@ -38,4 +38,8 @@ export class RulesService {
   getData(endPoint): Observable<any> {
     return this.http.get(endPoint);
   }
+
+  runRule(rule: Rule, site): Observable<any> {
+    return this.http.post(environment.apiUrl + 'rules/run-rule/' + rule.id, site);
+  }
 }

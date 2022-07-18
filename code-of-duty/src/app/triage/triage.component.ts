@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatListOption } from '@angular/material/list';
 import { map, Observable, startWith } from 'rxjs';
 import { NotificationsService } from 'src/notifications.service';
 import { RulesService } from '../rules/rules.service';
@@ -17,13 +16,13 @@ export class TriageComponent implements OnInit {
   sites: Site[];
   filteredSites: Observable<Site[]>;
   rules: Rule[];
-  selectedRules: Rule[];
+  selectedRules: Rule[] = [];
 
   constructor(
     private readonly rulesService: RulesService,
     private readonly sitesService: SitesService,
     private readonly notification: NotificationsService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadSites();
@@ -61,11 +60,8 @@ export class TriageComponent implements OnInit {
     this.rulesService.getRules().subscribe((response: Rule[]) => {
       response.map((rule) => (rule.status = RuleValidationStatus.OPEN));
       this.rules = response;
-    });
-  }
 
-  onSelectionChange(rules: MatListOption[]) {
-    this.selectedRules = rules.map((rule) => rule.value);
+    });
   }
 
   onSubmit() {
@@ -83,29 +79,63 @@ export class TriageComponent implements OnInit {
     return RuleValidationStatus[status];
   }
 
+  toggleRulesSelection() {
+    this.selectedRules = this.selectedRules.length === this.rules.length ? [] : this.selectedRules = this.rules;
+  }
+
   triageSite() {
     const rules = this.selectedRules;
     let selectedSite = this.siteControl.value;
     rules.forEach((rule) => {
-      if (rule.checkType === 'count') {
-        rule.status = RuleValidationStatus.INPROGRESS;
-        let endPoint = rule.endPoint;
-        if (endPoint.includes('{') && rule.endPoint?.includes('}')) {
-          const paramName = endPoint.split('{').pop().split('}')[0];
-          endPoint = endPoint.replace('{' + paramName+ '}', selectedSite[paramName]);
+      if (rule.system === 'ae' || rule.system === 'cewis') {
+        if (rule.checkType === 'count') {
+          rule.status = RuleValidationStatus.INPROGRESS;
+          let endPoint = rule.endPoint;
+          if (endPoint.includes('{') && rule.endPoint?.includes('}')) {
+            const paramName = endPoint.split('{').pop().split('}')[0];
+            endPoint = endPoint.replace('{' + paramName + '}', selectedSite[paramName]);
+          }
+          this.rulesService.getData(endPoint).subscribe((apiResponse) => {
+            rule.status =
+              apiResponse.length > 0
+                ? RuleValidationStatus.PASS
+                : RuleValidationStatus.FAIL;
+          }, (error) => (rule.status = RuleValidationStatus.FAILED));
+        } else if (rule.checkType === 'data') {
+          rule.status = RuleValidationStatus.INPROGRESS;
+          this.rulesService.getData(rule.endPoint).subscribe(
+            (apiResponse) => {
+              const sourceProperty = rule.source || '';
+              const responseProperty = rule.response || '';
+              const sourceValue = selectedSite
+                ? selectedSite[sourceProperty]
+                : null;
+              if (apiResponse) {
+                const dataExists = apiResponse.filter(
+                  (resp) => resp[responseProperty] === sourceValue
+                );
+                rule.status =
+                  dataExists.length > 0
+                    ? RuleValidationStatus.PASS
+                    : RuleValidationStatus.FAIL;
+              } else {
+                rule.status = RuleValidationStatus.FAIL;
+              }
+            },
+            (error) => (rule.status = RuleValidationStatus.FAILED)
+          );
         }
-        this.rulesService.getData(endPoint).subscribe((apiResponse) => {
-          rule.status =
-          apiResponse.length > 0
-                  ? RuleValidationStatus.PASS
-                  : RuleValidationStatus.FAIL;
-        }, (error) => (rule.status = RuleValidationStatus.FAILED));
-      } else if (rule.checkType === 'data') {
+      } else if (rule.system === 'pg') {
         rule.status = RuleValidationStatus.INPROGRESS;
-        this.rulesService.getData(rule.endPoint).subscribe(
-          (apiResponse) => {
-            const sourceProperty = rule.source || '';
-            const responseProperty = rule.response || '';
+        this.rulesService.runRule(rule, selectedSite).subscribe(apiResponse => {
+          if (rule.sqlCheckType === 'count') {
+            rule.status =
+              apiResponse.length > 0
+                ? RuleValidationStatus.PASS
+                : RuleValidationStatus.FAIL;
+          } else if (rule.sqlCheckType === 'data') {
+            const sourceProperty = rule.sqlSource || '';
+            const responseProperty = rule.sqlResponse || '';
             const sourceValue = selectedSite
               ? selectedSite[sourceProperty]
               : null;
@@ -120,9 +150,8 @@ export class TriageComponent implements OnInit {
             } else {
               rule.status = RuleValidationStatus.FAIL;
             }
-          },
-          (error) => (rule.status = RuleValidationStatus.FAILED)
-        );
+          }
+        }, (error) => (rule.status = RuleValidationStatus.FAILED));
       }
     });
   }

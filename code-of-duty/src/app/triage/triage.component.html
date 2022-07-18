@@ -21,8 +21,11 @@
         <button type="button" mat-raised-button (click)="onSubmit()" color="primary">
             Triage
         </button>
+        <button type="button" mat-raised-button (click)="toggleRulesSelection()" color="accent">
+            Select/Unselect All Rules
+        </button>
     </form>
-    <mat-selection-list #rulesList (selectionChange)="onSelectionChange(rulesList.selectedOptions.selected)">
+    <mat-selection-list #rulesList [(ngModel)]="selectedRules">
         <mat-list-option *ngFor="let rule of rules" [value]="rule">
             <mat-icon mat-list-icon class="rule_status_{{rule.status}}">
                 {{rule.status === 'FAIL' ? 'clear' : (rule.status === 'INPROGRESS' ? 'loop' : 'check_circle')}}
