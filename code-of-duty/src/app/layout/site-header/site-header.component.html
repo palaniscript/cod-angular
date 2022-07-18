@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-    <span>{{appTitle}}</span>
+    <a mat-button [routerLink]="'/dashboard'">{{appTitle}}</a>
     <span class="spacer"></span>
     <div class="top-menu">
         <a mat-stroked-button [routerLink]="'/dashboard'" [routerLinkActive]="'mat-accent active-menu'">Dashboard</a>

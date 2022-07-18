@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Title } from '@angular/platform-browser';
 import { User } from 'src/app/shared/model';
 import { environment } from 'src/environments/environment';
 import { LoginService } from '../../shared/login.service';
@@ -14,8 +13,7 @@ export class SiteHeaderComponent implements OnInit {
   isFullScreen = false;
 
   constructor(
-    private readonly loginService: LoginService,
-    public readonly titleService: Title) {
+    private readonly loginService: LoginService) {
     this.appTitle = environment.appTitle;
   }
 

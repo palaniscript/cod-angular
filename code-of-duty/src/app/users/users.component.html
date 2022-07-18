@@ -13,29 +13,29 @@
 </div>
 
 <div style="padding: 0 20px" class="mat-elevation-z8">
-  <table mat-table [dataSource]="dataSource">
+  <table mat-table [dataSource]="dataSource" matSort>
 
     <!-- username Column -->
     <ng-container matColumnDef="username">
-      <th mat-header-cell *matHeaderCellDef> Username </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Username </th>
       <td mat-cell *matCellDef="let element"> {{element.username}} </td>
     </ng-container>
 
     <!-- email Column -->
     <ng-container matColumnDef="email">
-      <th mat-header-cell *matHeaderCellDef> Email </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
       <td mat-cell *matCellDef="let element"> {{element.email}} </td>
     </ng-container>
 
     <!-- roleName Column -->
     <ng-container matColumnDef="roleName">
-      <th mat-header-cell *matHeaderCellDef> Role </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
       <td mat-cell *matCellDef="let element"> {{element.roleName}} </td>
     </ng-container>
 
     <!-- status Column -->
     <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
       <td mat-cell *matCellDef="let element"> {{element.status}} </td>
     </ng-container>
 
@@ -43,8 +43,8 @@
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef> Actions </th>
       <td mat-cell *matCellDef="let element">
-        <mat-icon class="mr-2" color="primary" (click)="editUser(element)">edit</mat-icon> &nbsp;
-        <mat-icon class="mr-2" color="warn" (click)="deleteUser(element)">delete</mat-icon>
+        <mat-icon class="mr-2" color="primary" (click)="editUser(element)" matTooltip="Edit user">edit</mat-icon> &nbsp;
+        <mat-icon class="mr-2" color="warn" (click)="deleteUser(element)" matTooltip="Delete user">delete</mat-icon>
       </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
