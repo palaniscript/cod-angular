@@ -85,10 +85,6 @@ export class AddEditUserComponent implements OnInit {
       this.loading = true;
       if (this.data.user !== null) {
         const userData = this.userForm.value;
-        // Update password only if changed
-        if (userData.password === this.fetchedUser.password) {
-          delete userData.password;
-        }
         this.usersService.updateUser(userData, this.data.user).subscribe((response: User) => {
           this.loading = false;
           this.notification.success('User updated successfully');
