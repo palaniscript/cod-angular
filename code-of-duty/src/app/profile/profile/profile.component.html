@@ -1,0 +1,40 @@
+<div class="page-header justify-content-between align-items-center">
+    <div class="start">
+        <div class="title">
+            <h2>Profile</h2>
+        </div>
+    </div>
+</div>
+
+<div style="padding: 0 20px" class="mat-elevation-z8">
+    <mat-list>
+        <mat-list-item>
+            <mat-icon mat-list-icon color="accent">badge</mat-icon>
+            <div mat-line><span class="profile-title">Name:</span> {{user.name}}</div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+            <mat-icon mat-list-icon color="accent">account_box</mat-icon>
+            <div mat-line><span class="profile-title">Username:</span> {{user.username}}</div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+            <mat-icon mat-list-icon color="accent">email</mat-icon>
+            <div mat-line><span class="profile-title">Email:</span> {{user.email}}</div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+            <mat-icon mat-list-icon color="accent">group</mat-icon>
+            <div mat-line><span class="profile-title">Role:</span> {{user.role === 1 ? 'Administrator' : 'Site
+                Engineer'}}</div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+            <mat-icon mat-list-icon color="accent">lock</mat-icon>
+            <div mat-line><span class="profile-title">Status:</span> {{user.status}}</div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+    </mat-list>
+    <br />
+    <div class="profile-note">Contact administrator to update your profile details.</div>
+</div>

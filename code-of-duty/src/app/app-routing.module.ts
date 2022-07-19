@@ -76,6 +76,14 @@ const routes: Routes = [
     },
   },
   {
+    path: 'profile',
+    component: SiteLayoutComponent,
+    loadChildren: () => import('src/app/profile/profile.module').then(m => m.ProfileModule),
+    data: {
+      title: 'Profile'
+    },
+  },
+  {
     path: '404',
     component: NotFoundComponent,
     data: {

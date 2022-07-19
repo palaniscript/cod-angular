@@ -14,7 +14,6 @@ import { SiteHeaderComponent } from './layout/site-header/site-header.component'
 import { SiteLayoutComponent } from './layout/site-layout/site-layout.component';
 import { LoginComponent } from './login/login.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { ProfileComponent } from './profile/profile.component';
 import { LoaderComponent } from './shared/loader/loader.component';
 import { AuthGuard } from './utils/auth.guards';
 import { JwtInterceptor } from './utils/interceptor';
@@ -25,7 +24,6 @@ import { JwtInterceptor } from './utils/interceptor';
     NotFoundComponent,
     AccessDeniedComponent,
     LoginComponent,
-    ProfileComponent,
     SiteLayoutComponent,
     SiteHeaderComponent,
     ConfirmDialogComponent,
