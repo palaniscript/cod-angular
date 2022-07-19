@@ -8,7 +8,7 @@ import { LocalStorageService } from './local-storage.service';
 import { User } from './model';
 
 @Injectable({ providedIn: 'root' })
-export class LoginService {
+export class AuthService {
     private userSubject: BehaviorSubject<User>;
     public user: Observable<User>;
 
@@ -32,6 +32,10 @@ export class LoginService {
                 this.userSubject.next(user);
                 return user;
             }));
+    }
+
+    isAdmin() {
+        return this.userValue.role === 1;
     }
 
     logout() {

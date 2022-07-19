@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertService } from '../shared/alert.service';
-import { LoginService } from '../shared/login.service';
+import { AuthService } from '../shared/auth.service';
 
 @Component({
   templateUrl: './login.component.html',
@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly router: Router,
-    private readonly loginService: LoginService,
+    private readonly authService: AuthService,
     private readonly alertService: AlertService
   ) {}
 
@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
     }
 
     this.loading = true;
-    this.loginService
+    this.authService
       .login(this.loginForm.value.username, this.loginForm.value.password)
       .subscribe(
         (data) => {

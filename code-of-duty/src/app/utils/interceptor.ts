@@ -1,21 +1,23 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, finalize, Observable, throwError } from 'rxjs';
+import { NotificationsService } from 'src/notifications.service';
 import { environment } from '../../environments/environment';
 import { LoaderService } from '../shared/loader.service';
-import { LoginService } from '../shared/login.service';
+import { AuthService } from '../shared/auth.service';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
     constructor(
-        private readonly loginService: LoginService,
+        private readonly authService: AuthService,
         private readonly loaderService: LoaderService,
+        private readonly notificationService: NotificationsService,
     ) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         this.loaderService.show();
 
-        const user = this.loginService.userValue;
+        const user = this.authService.userValue;
         const isLoggedIn = user && user.accessToken;
         const isApiUrl = request.url.startsWith(environment.apiUrl);
         if (isLoggedIn && isApiUrl) {
@@ -29,8 +31,9 @@ export class JwtInterceptor implements HttpInterceptor {
         return next.handle(request).pipe(
             catchError((err: HttpErrorResponse) => {
                 if (err.status == 401) {
-                    this.loginService.logout();
+                    this.authService.logout();
                 }
+                this.notificationService.error(err.message);
                 return throwError(err);
             }),
             finalize(() => this.loaderService.hide()),

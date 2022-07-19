@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'src/app/shared/model';
 import { environment } from 'src/environments/environment';
-import { LoginService } from '../../shared/login.service';
+import { AuthService } from '../../shared/auth.service';
 
 @Component({
   selector: 'app-site-header',
@@ -14,14 +14,14 @@ export class SiteHeaderComponent implements OnInit {
   isFullScreen = false;
 
   constructor(
-    private readonly loginService: LoginService,
+    private readonly authService: AuthService,
     private readonly router: Router) {
     this.appTitle = environment.appTitle;
   }
 
   ngOnInit() {
     this.chkScreenMode();
-    this.loginService.user.subscribe(user => {
+    this.authService.user.subscribe(user => {
       this.user = user;
     });
   }
@@ -79,7 +79,7 @@ export class SiteHeaderComponent implements OnInit {
   }
 
   logout() {
-    this.loginService.logout();
+    this.authService.logout();
   }
 
   gotoProfile() {

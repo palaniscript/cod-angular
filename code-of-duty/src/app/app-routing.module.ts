@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AccessDeniedComponent } from './access-denied/access-denied.component';
 import { SiteLayoutComponent } from './layout/site-layout/site-layout.component';
 import { LoginComponent } from './login/login.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { AuthGuard } from './utils/auth.guards';
 
 const routes: Routes = [
   {
@@ -21,7 +23,6 @@ const routes: Routes = [
     data: {
       title: 'Dashboard'
     },
-    // canActivate: [AuthGuardService]
   },
   {
     path: 'users',
@@ -30,7 +31,7 @@ const routes: Routes = [
     data: {
       title: 'Users'
     },
-    // canActivate: [AuthGuardService]
+    canActivate: [AuthGuard]
   },
   {
     path: 'roles',
@@ -39,7 +40,7 @@ const routes: Routes = [
     data: {
       title: 'Roles'
     },
-    // canActivate: [AuthGuardService]
+    canActivate: [AuthGuard]
   },
   {
     path: 'rules',
@@ -48,7 +49,7 @@ const routes: Routes = [
     data: {
       title: 'Rules'
     },
-    // canActivate: [AuthGuardService]
+    canActivate: [AuthGuard]
   },
   {
     path: 'sites',
@@ -57,7 +58,6 @@ const routes: Routes = [
     data: {
       title: 'Sites'
     },
-    // canActivate: [AuthGuardService]
   },
   {
     path: 'triage',
@@ -66,10 +66,21 @@ const routes: Routes = [
     data: {
       title: 'Triage'
     },
-    // canActivate: [AuthGuardService]
   },
- 
-  { path: '404', component: NotFoundComponent },
+  {
+    path: '404',
+    component: NotFoundComponent,
+    data: {
+      title: 'Not Found'
+    }
+  },
+  {
+    path: 'access-denied',
+    component: AccessDeniedComponent,
+    data: {
+      title: 'Access Denied'
+    },
+  },
   { path: '**', redirectTo: '/404' }
 ];
 
