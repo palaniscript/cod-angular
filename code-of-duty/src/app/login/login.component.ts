@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertService } from '../shared/alert.service';
+import { NotificationsService } from 'src/notifications.service';
 import { AuthService } from '../shared/auth.service';
 
 @Component({
@@ -10,16 +10,13 @@ import { AuthService } from '../shared/auth.service';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  loading = false;
-  submitted = false;
-  returnUrl: string;
 
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly router: Router,
     private readonly authService: AuthService,
-    private readonly alertService: AlertService
-  ) {}
+    private readonly notificationService: NotificationsService
+  ) { }
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
@@ -33,23 +30,21 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.submitted = true;
-    this.alertService.clear();
-    if (this.loginForm.invalid) {
-      return;
+    if (this.loginForm.valid) {
+      this.authService
+        .login(this.loginForm.value.username, this.loginForm.value.password)
+        .subscribe(
+          (response: any) => {
+            if (response.accessToken) {
+              this.router.navigate(['dashboard']);
+            } else {
+              this.notificationService.error(response.message);
+            }
+          },
+          (error) => {
+            this.notificationService.error(error.error.message);
+          }
+        );
     }
-
-    this.loading = true;
-    this.authService
-      .login(this.loginForm.value.username, this.loginForm.value.password)
-      .subscribe(
-        (data) => {
-          this.router.navigate(['dashboard']);
-        },
-        (error) => {
-          this.alertService.error(error.error.message);
-          this.loading = false;
-        }
-      );
   }
 }

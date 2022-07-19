@@ -6,7 +6,6 @@ import { MatInputModule } from '@angular/material/input';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AccessDeniedComponent } from './access-denied/access-denied.component';
-import { AlertComponent } from './alert/alert.component';
 import { AppMaterialModule } from './app-material/app-material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -30,7 +29,6 @@ import { JwtInterceptor } from './utils/interceptor';
     SiteLayoutComponent,
     SiteHeaderComponent,
     ConfirmDialogComponent,
-    AlertComponent,
     LoaderComponent
   ],
   imports: [

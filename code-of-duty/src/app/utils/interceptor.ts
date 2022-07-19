@@ -30,10 +30,12 @@ export class JwtInterceptor implements HttpInterceptor {
         }
         return next.handle(request).pipe(
             catchError((err: HttpErrorResponse) => {
-                if (err.status == 401) {
+                if (err.status == 401 && request.url !== environment.apiUrl + 'users/signin') {
                     this.authService.logout();
                 }
-                this.notificationService.error(err.message);
+                if (request.url !== environment.apiUrl + 'users/signin') {
+                    this.notificationService.error(err.message);
+                }
                 return throwError(err);
             }),
             finalize(() => this.loaderService.hide()),
