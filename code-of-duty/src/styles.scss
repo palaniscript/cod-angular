@@ -26,12 +26,14 @@ body {
       color: #000;
       text-decoration: none;
     }
+
+    &.active-menu {
+      background: #fff;
+    }
   }
 }
 
-.active-menu {
-  background: #fff;
-}
+
 
 table,
 .mat-form-field {
@@ -46,12 +48,6 @@ table,
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  box-shadow: 0 0 4px 2px #ececec;
-  // Make feature header sticky
-  position: sticky;
-  top: 0;
-  z-index: 9999;
-  margin-bottom: 20px;
 
   &>.start {
     display: flex;

@@ -1,47 +1,11 @@
-$link-color: #3f51b5;
-$link-hover-color: currentColor;
-$link-hover-decoration: none;
-
 $white: #ffffff;
-$black: #000000;
-$header-white-color: rgba(255, 255, 255, 0.8);
-$primary: #1abc9c;
-$main-grey: #2c3e50;
-$page-title-color: #8a909d;
-$dash-tile-value-color: #1b223c; 
-
 $warning: #f1c40f;
 $danger: #e74c3c;
+$accent: #ff4081;
 $success: #2ecc71;
-
-$table-header-color: #37474f;
-$table-header-bg-color: #f6f6f6;
-
-$sidenav-list-item-color: #d0dcda;
-$side--bar-profile-bg-color: #3e5871;
-
-
-// --blue: #1abc9c;
-//     --indigo: #6610f2;
-//     --purple: #6f42c1;
-//     --pink: #e83e8c;
-//     --red: #e74c3c;
-//     --orange: #fd7e14;
-//     --yellow: #f1c40f;
-//     --green: #2ecc71;
-//     --teal: #20c997;
-//     --cyan: #00acc1;
-//     --white: #fff;
-//     --gray: #6c757d;
-//     --gray-dark: #343a40;
-//     --primary: #1abc9c;
-//     --secondary: #6c757d;
-//     --success: #2ecc71;
-//     --info: #00acc1;
-//     --warning: #f1c40f;
-//     --danger: #e74c3c;
-//     --light: #f8f9fa;
-//     --dark: #343a40;
+$grey: #cccccc;
+$light-grey: #eeeeee;
+$overlay-background: rgba(0, 0, 0, 0.286);
 
 $grid-breakpoints: (
   xs: 0, // handset portrait (small, medium, large) | handset landscape (small)

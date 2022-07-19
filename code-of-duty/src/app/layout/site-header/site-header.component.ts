@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { User } from 'src/app/shared/model';
 import { environment } from 'src/environments/environment';
 import { LoginService } from '../../shared/login.service';
@@ -13,7 +14,8 @@ export class SiteHeaderComponent implements OnInit {
   isFullScreen = false;
 
   constructor(
-    private readonly loginService: LoginService) {
+    private readonly loginService: LoginService,
+    private readonly router: Router) {
     this.appTitle = environment.appTitle;
   }
 
@@ -78,5 +80,9 @@ export class SiteHeaderComponent implements OnInit {
 
   logout() {
     this.loginService.logout();
+  }
+
+  gotoProfile() {
+    this.router.navigate(['profile']);
   }
 }

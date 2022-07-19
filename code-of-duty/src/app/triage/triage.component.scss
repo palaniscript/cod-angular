@@ -1,31 +1,32 @@
+@import '../../variables';
+
 .mat-list-base {
   padding: 0;
 
   .mat-list-item {
     height: auto;
     padding: 10px 0;
-    border-bottom: 1px #eee solid;
+    border-bottom: 1px $light-grey solid;
 
     .mat-line:last-of-type {
-      color: #ccc;
+      color: $grey;
       font-size: 12px;
     }
 
     .rule_status_OPEN {
-      color: #ccc;
+      color: $grey;
     }
 
     .rule_status_INPROGRESS {
-      // color: yellow;
       animation: rotation 1s infinite linear;
     }
 
     .rule_status_PASS {
-      color: green;
+      color: $success;
     }
 
     .rule_status_FAIL {
-      color: red;
+      color: $danger;
     }
   }
 }

@@ -1,3 +1,5 @@
+@import '../../variables';
+
 .mat-simple-snackbar {
   display: flex;
   justify-content: space-between;
@@ -9,7 +11,7 @@
 }
 
 .mat-simple-snackbar-action {
-  color: #ff4081;
+  color: $accent;
   line-height: 1;
   font-family: inherit;
   font-size: inherit;
