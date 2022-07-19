@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { map, Observable, startWith } from 'rxjs';
 import { NotificationsService } from 'src/notifications.service';
 import { RulesService } from '../rules/rules.service';
@@ -12,6 +13,7 @@ import { SitesService } from '../sites/sites.service';
   styleUrls: ['./triage.component.scss'],
 })
 export class TriageComponent implements OnInit {
+  siteIdParam: string;
   siteControl = new FormControl<string | Site>('');
   sites: Site[];
   filteredSites: Observable<Site[]>;
@@ -21,8 +23,13 @@ export class TriageComponent implements OnInit {
   constructor(
     private readonly rulesService: RulesService,
     private readonly sitesService: SitesService,
-    private readonly notification: NotificationsService
-  ) { }
+    private readonly notification: NotificationsService,
+    private readonly route: ActivatedRoute,
+  ) {
+    this.route.paramMap.subscribe(paramMap => {
+      this.siteIdParam = paramMap.get('siteId');
+    })
+  }
 
   ngOnInit(): void {
     this.loadSites();
@@ -53,6 +60,10 @@ export class TriageComponent implements OnInit {
             : this.sites.slice();
         })
       );
+      if (this.siteIdParam !== null) {
+        const selectedSiteIndex = this.sites.findIndex(site => site.id === parseInt(this.siteIdParam, 10));
+        this.siteControl.setValue(this.sites[selectedSiteIndex]);
+      }
     });
   }
 

@@ -68,6 +68,14 @@ const routes: Routes = [
     },
   },
   {
+    path: 'triage/:siteId',
+    component: SiteLayoutComponent,
+    loadChildren: () => import('src/app/triage/triage.module').then(m => m.TriageModule),
+    data: {
+      title: 'Triage'
+    },
+  },
+  {
     path: '404',
     component: NotFoundComponent,
     data: {

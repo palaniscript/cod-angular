@@ -3,6 +3,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { ConfirmDialogComponent, ConfirmDialogModel } from 'src/app/confirm-dialog/confirm-dialog.component';
 import { Site } from 'src/app/shared/model';
 import { SitesService } from 'src/app/sites/sites/sites.service';
@@ -16,7 +17,7 @@ import { AddEditSiteComponent } from '../add-edit-site/add-edit-site.component';
 })
 export class SitesComponent implements OnInit {
 
-  public displayedColumns: string[] = ['siteId', 'siteName', 'aeId', 'cewisId','status','action'];
+  public displayedColumns: string[] = ['siteId', 'siteName', 'aeId', 'cewisId', 'status', 'action'];
   public pageSizeOptions: number[] = environment.pageSizeOptions;
   public dataSource: MatTableDataSource<Site>;
   public columns: { header: string; columnDef: string; }[];
@@ -24,10 +25,11 @@ export class SitesComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  
+
   constructor(
     private readonly dialog: MatDialog,
     private readonly siteService: SitesService,
+    private readonly router: Router,
     private readonly notification: NotificationsService
   ) {
   }
@@ -59,7 +61,11 @@ export class SitesComponent implements OnInit {
         this.loadSites();
       }
     });
-   }
+  }
+
+  triageSite(row: Site): void {
+    this.router.navigate(['triage', { siteId: row.id }]);
+  }
 
   editSite(row: Site): void {
     this.addEditDialogRef = this.dialog.open(AddEditSiteComponent, {
@@ -76,7 +82,7 @@ export class SitesComponent implements OnInit {
         this.loadSites();
       }
     });
-   }
+  }
 
   deleteSite(row: Site): void {
     const message = `Are you sure you want to delete this site?`;

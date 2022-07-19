@@ -51,6 +51,7 @@
         <ng-container matColumnDef="action">
             <th mat-header-cell *matHeaderCellDef> Actions </th>
             <td mat-cell *matCellDef="let element">
+                <mat-icon class="mr-2" color="primary" (click)="triageSite(element)" matTooltip="Triage site">troubleshoot</mat-icon> &nbsp;
                 <mat-icon class="mr-2" color="primary" (click)="editSite(element)" matTooltip="Edit site">edit</mat-icon> &nbsp;
                 <mat-icon class="mr-2" color="warn" (click)="deleteSite(element)" matTooltip="Delete site">delete</mat-icon>
             </td>
