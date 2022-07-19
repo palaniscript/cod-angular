@@ -16,7 +16,7 @@ import { Rule } from 'src/app/shared/model';
 })
 export class RulesComponent implements OnInit {
 
-  public displayedColumns: string[] = ['title', 'checkType', 'system', 'createdAt', 'action'];
+  public displayedColumns: string[] = ['title', 'system', 'checkType', 'createdAt', 'action'];
   public pageSizeOptions: number[] = environment.pageSizeOptions;
   public dataSource: MatTableDataSource<Rule>;
   public columns: { header: string; columnDef: string; }[];

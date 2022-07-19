@@ -127,7 +127,7 @@ export class TriageComponent implements OnInit {
         }
       } else if (rule.system === 'pg') {
         rule.status = RuleValidationStatus.INPROGRESS;
-        this.rulesService.runRule(rule, selectedSite).subscribe(apiResponse => {
+        this.rulesService.runPGRule(rule, selectedSite).subscribe(apiResponse => {
           if (rule.sqlCheckType === 'count') {
             rule.status =
               apiResponse.length > 0
@@ -151,6 +151,14 @@ export class TriageComponent implements OnInit {
               rule.status = RuleValidationStatus.FAIL;
             }
           }
+        }, (error) => (rule.status = RuleValidationStatus.FAILED));
+      } else if (rule.system === 'aws') {
+        rule.status = RuleValidationStatus.INPROGRESS;
+        this.rulesService.runAWSRule(rule, selectedSite).subscribe(apiResponse => {
+          rule.status =
+            apiResponse.length > 0
+              ? RuleValidationStatus.PASS
+              : RuleValidationStatus.FAIL;
         }, (error) => (rule.status = RuleValidationStatus.FAILED));
       }
     });

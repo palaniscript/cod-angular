@@ -39,7 +39,11 @@ export class RulesService {
     return this.http.get(endPoint);
   }
 
-  runRule(rule: Rule, site): Observable<any> {
-    return this.http.post(environment.apiUrl + 'rules/run-rule/' + rule.id, site);
+  runPGRule(rule: Rule, site): Observable<any> {
+    return this.http.post(environment.apiUrl + 'rules/run-pg-rule/' + rule.id, site);
+  }
+
+  runAWSRule(rule: Rule, site): Observable<any> {
+    return this.http.post(environment.apiUrl + 'rules/run-aws-rule/' + rule.id, site);
   }
 }

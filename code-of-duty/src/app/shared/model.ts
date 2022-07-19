@@ -72,6 +72,9 @@ export interface Rule {
     sqlCheckType?: string;
     sqlSource?: string;
     sqlResponse?: string;
+    s3Bucket?: string;
+    folderName?: string;
+    day?: number;
     status?: RuleValidationStatus;
 }
 

@@ -29,7 +29,7 @@
     <mat-form-field appearance="fill" *ngIf="showEndPoint">
         <mat-label>Endpoint</mat-label>
         <input matInput formControlName="endPoint" placeholder="Enter the rule endPoint">
-        <mat-hint>You can use siteId, siteName, cewisId as params. use &#123; &#125; for including params</mat-hint>
+        <mat-hint>You can use &#123;siteId&#125;, &#123;siteName&#125;, &#123;cewisId&#125; as params.</mat-hint>
         <mat-error *ngIf="getFormControl('endPoint')?.errors?.required">Endpoint is required</mat-error>
     </mat-form-field>
     <mat-form-field appearance="fill" *ngIf="showEndPoint">
@@ -59,7 +59,7 @@
     <mat-form-field appearance="fill" *ngIf="showSqlOptions">
         <mat-label>SQL Query</mat-label>
         <textarea matInput formControlName="query" placeholder="Enter the query"></textarea>
-        <mat-hint>You can use siteId, siteName, cewisId as params. use &#123; &#125; for including params</mat-hint>
+        <mat-hint>You can use &#123;siteId&#125;, &#123;siteName&#125;, &#123;cewisId&#125; for inclusing.</mat-hint>
         <mat-error *ngIf="getFormControl('query')?.errors?.required">Query is required</mat-error>
         <mat-error *ngIf="getFormControl('query')?.errors?.wrongQuery">Invalid Query</mat-error>
     </mat-form-field>
@@ -83,6 +83,30 @@
             <mat-label>Response Property</mat-label>
             <input matInput formControlName="sqlResponse" placeholder="Enter the response">
             <mat-error *ngIf="getFormControl('sqlResponse')?.errors?.required">Response is required</mat-error>
+        </mat-form-field>
+    </ng-container>
+
+    <!-- S3 rule related fields -->
+    <ng-container *ngIf="showAwsOptions">
+        <mat-form-field appearance="fill">
+            <mat-label>S3 Bucket Name</mat-label>
+            <input matInput formControlName="s3Bucket" placeholder="Enter the S3 bucket name">
+            <mat-error *ngIf="getFormControl('s3Bucket')?.errors?.required">S3 bucket name is required</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Folder Name</mat-label>
+            <input matInput formControlName="folderName" placeholder="Enter the Folder name">
+            <mat-hint>You can use &#123;siteId&#125;, &#123;siteName&#125;, &#123;cewisId&#125; as folder name.</mat-hint>
+            <mat-error *ngIf="getFormControl('folderName')?.errors?.required">Folder name is required</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Day</mat-label>
+            <mat-select formControlName="day">
+                <mat-option *ngFor="let day of days" [value]="day.value">
+                    {{day.viewValue}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="getFormControl('day')?.errors?.required">Please select a day</mat-error>
         </mat-form-field>
     </ng-container>
 </div>

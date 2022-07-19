@@ -17,12 +17,14 @@ export class AddEditRuleComponent implements OnInit {
   public loading = false;
   public showEndPoint = false;
   public showSqlOptions = false;
+  public showAwsOptions = false;
   public showDataValidationFields = false;
   public showSqlDataValidationFields = false;
   public systems = [
     { value: 'ae', viewValue: 'Also Energy' },
     { value: 'cewis', viewValue: 'CEWIS' },
     { value: 'pg', viewValue: 'Postgres' },
+    { value: 'aws', viewValue: 'AWS' },
   ];
   public checkTypes = [
     { value: 'count', viewValue: 'Has Data' },
@@ -31,6 +33,14 @@ export class AddEditRuleComponent implements OnInit {
   public sqlCheckTypes = [
     { value: 'count', viewValue: 'Has Data' },
     { value: 'data', viewValue: 'Validate Data' },
+  ];
+  public days = [
+    { value: 0, viewValue: 'Current Day' },
+    { value: -1, viewValue: 'Current Day - 1' },
+    { value: -2, viewValue: 'Current Day - 2' },
+    { value: -3, viewValue: 'Current Day - 3' },
+    { value: -4, viewValue: 'Current Day - 4' },
+    { value: -5, viewValue: 'Current Day - 5' },
   ];
 
   constructor(
@@ -57,7 +67,10 @@ export class AddEditRuleComponent implements OnInit {
       query: ['', [Validators.required, invalidQueryValidator()]],
       sqlCheckType: ['', [Validators.required]],
       sqlSource: ['', [Validators.required]],
-      sqlResponse: ['', [Validators.required]]
+      sqlResponse: ['', [Validators.required]],
+      s3Bucket: ['', [Validators.required]],
+      folderName: ['', [Validators.required]],
+      day: ['', [Validators.required]]
     });
     if (this.data.rule !== null) {
       this.fetchRule();
@@ -66,26 +79,66 @@ export class AddEditRuleComponent implements OnInit {
 
   onSystemChange(event) {
     this.showEndPoint = event.value === 'ae' || event.value === 'cewis';
-    if (this.ruleForm.value.endPoint === '') {
-      if (event.value === 'ae') {
-        this.showSqlOptions = false;
+    if (event.value === 'ae') {
+      this.showAwsOptions = false;
+      this.clearSqlFieldValidators();
+      this.clearAwsFieldValidators();
+      this.showSqlOptions = false;
+      if (this.data.rule === null) {
         this.ruleForm.patchValue({ endPoint: environment.aeUrl });
-      } else if (event.value === 'cewis') {
-        this.showSqlOptions = false;
-        this.ruleForm.patchValue({ endPoint: environment.cewisUrl });
-      } else {
-        this.showSqlOptions = true;
-        this.ruleForm.patchValue({ endPoint: '' });
-        this.ruleForm.controls['endPoint'].clearValidators();
-        this.ruleForm.controls['checkType'].clearValidators();
-        this.ruleForm.controls['source'].clearValidators();
-        this.ruleForm.controls['response'].clearValidators();
-        this.ruleForm.controls['endPoint'].updateValueAndValidity();
-        this.ruleForm.controls['checkType'].updateValueAndValidity();
-        this.ruleForm.controls['source'].updateValueAndValidity();
-        this.ruleForm.controls['response'].updateValueAndValidity();
       }
+    } else if (event.value === 'cewis') {
+      this.showAwsOptions = false;
+      this.clearSqlFieldValidators();
+      this.clearAwsFieldValidators();
+      this.showSqlOptions = false;
+      if (this.data.rule === null) {
+        this.ruleForm.patchValue({ endPoint: environment.cewisUrl });
+      }
+    } else if (event.value === 'pg') {
+      this.ruleForm.patchValue({ endPoint: '' });
+      this.clearEndpointFieldValidators();
+      this.clearAwsFieldValidators();
+      this.showSqlOptions = true;
+    } else {
+      this.ruleForm.patchValue({ endPoint: '' });
+      this.clearEndpointFieldValidators();
+      this.clearSqlFieldValidators();
+      this.showSqlOptions = false;
+      this.showAwsOptions = true;
     }
+  }
+
+  private clearEndpointFieldValidators() {
+    this.ruleForm.patchValue({ endPoint: '' });
+    this.ruleForm.controls['endPoint'].clearValidators();
+    this.ruleForm.controls['checkType'].clearValidators();
+    this.ruleForm.controls['source'].clearValidators();
+    this.ruleForm.controls['response'].clearValidators();
+    this.ruleForm.controls['endPoint'].updateValueAndValidity();
+    this.ruleForm.controls['checkType'].updateValueAndValidity();
+    this.ruleForm.controls['source'].updateValueAndValidity();
+    this.ruleForm.controls['response'].updateValueAndValidity();
+  }
+
+  private clearSqlFieldValidators() {
+    this.ruleForm.controls['query'].clearValidators();
+    this.ruleForm.controls['sqlCheckType'].clearValidators();
+    this.ruleForm.controls['sqlSource'].clearValidators();
+    this.ruleForm.controls['sqlResponse'].clearValidators();
+    this.ruleForm.controls['query'].updateValueAndValidity();
+    this.ruleForm.controls['sqlCheckType'].updateValueAndValidity();
+    this.ruleForm.controls['sqlSource'].updateValueAndValidity();
+    this.ruleForm.controls['sqlResponse'].updateValueAndValidity();
+  }
+
+  private clearAwsFieldValidators() {
+    this.ruleForm.controls['s3Bucket'].clearValidators();
+    this.ruleForm.controls['folderName'].clearValidators();
+    this.ruleForm.controls['day'].clearValidators();
+    this.ruleForm.controls['s3Bucket'].updateValueAndValidity();
+    this.ruleForm.controls['folderName'].updateValueAndValidity();
+    this.ruleForm.controls['day'].updateValueAndValidity();
   }
 
   onCheckTypeChange(event) {
@@ -133,6 +186,9 @@ export class AddEditRuleComponent implements OnInit {
           sqlCheckType: response.sqlCheckType,
           sqlSource: response.sqlSource,
           sqlResponse: response.sqlResponse,
+          s3Bucket: response.s3Bucket,
+          folderName: response.folderName,
+          day: response.day,
         });
         this.onSystemChange({ value: response.system });
         this.onCheckTypeChange({ value: response.checkType });
