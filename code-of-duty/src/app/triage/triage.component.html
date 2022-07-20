@@ -21,8 +21,9 @@
         <button type="button" mat-raised-button (click)="onSubmit()" color="primary">
             Triage
         </button>
-        <button type="button" mat-raised-button (click)="toggleRulesSelection()" color="accent">
-            Select/Unselect All Rules
+        <button type="button" mat-flat-button (click)="toggleRulesSelection()" color="accent">
+            <mat-icon>checklist</mat-icon> &nbsp;
+            <span>Select/Unselect All Rules</span>
         </button>
     </form>
     <mat-selection-list #rulesList [(ngModel)]="selectedRules">

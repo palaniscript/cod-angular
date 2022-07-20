@@ -167,7 +167,7 @@ export class TriageComponent implements OnInit {
         rule.status = RuleValidationStatus.INPROGRESS;
         this.rulesService.runAWSRule(rule, selectedSite).subscribe(apiResponse => {
           rule.status =
-            apiResponse.length > 0
+            apiResponse.Contents && apiResponse.Contents.length > 0
               ? RuleValidationStatus.PASS
               : RuleValidationStatus.FAIL;
         }, (error) => (rule.status = RuleValidationStatus.FAILED));
