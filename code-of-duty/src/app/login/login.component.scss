@@ -1,8 +1,14 @@
 .login-page {
+    text-align: center;
     padding: 25vh 0;
 
     .login-card {
         width: 40%;
         margin: 0 auto;
+
+        .logo-button {
+            font-size: 24px;
+            margin: 15px 0;
+        }
     }
 }

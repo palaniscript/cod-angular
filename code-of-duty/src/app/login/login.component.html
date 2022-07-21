@@ -1,9 +1,10 @@
-<div class="login-page">
-    <mat-card class="login-card text-center mat-elevation-z8">
-        <mat-card-header>
-            <mat-card-title>Login</mat-card-title>
-        </mat-card-header>
+<div class="login-page"> 
+    <mat-card class="login-card text-center mat-elevation-z8">        
         <mat-card-content>
+            <a mat-button class="logo-button" color="primary">
+                <mat-icon>troubleshoot</mat-icon> &nbsp;
+                <span>{{appTitle}}</span>
+            </a>
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                 <mat-form-field appearance="fill">
                     <mat-label>Username</mat-label>
