@@ -24,7 +24,7 @@
         <!-- system Column -->
         <ng-container matColumnDef="system">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> System </th>
-            <td mat-cell *matCellDef="let element"> {{element.system}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.system | uppercase}} </td>
         </ng-container>
 
         <!-- checkType Column -->

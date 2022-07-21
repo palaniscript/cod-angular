@@ -70,7 +70,7 @@ export class AddEditRuleComponent implements OnInit {
       sqlResponse: ['', [Validators.required]],
       s3Bucket: ['', [Validators.required]],
       folderName: ['', [Validators.required]],
-      day: ['', [Validators.required]]
+      day: [null, [Validators.required]]
     });
     if (this.data.rule !== null) {
       this.fetchRule();
