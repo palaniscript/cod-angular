@@ -46,7 +46,7 @@ export class NotificationsService {
     this.snackBar.openFromComponent(SnackbarComponent, {
       duration: 2500,
       horizontalPosition: 'right',
-      verticalPosition: 'bottom',
+      verticalPosition: 'top',
       data: { message: message, snackType: type, snackBar: this.snackBar }
     });
   }
