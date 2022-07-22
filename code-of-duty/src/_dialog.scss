@@ -43,6 +43,16 @@
   }
 }
 
+@media all and (display-mode: fullscreen) {
+  .pm-dialog {
+    height: calc(100vh - 300px);
+  }
+
+  .mat-dialog-content {
+    height: 170px;
+  }
+}
+
 @media only screen and (max-width: 768px) {
   .pm-dialog {
     max-width: none !important;

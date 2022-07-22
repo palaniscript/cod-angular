@@ -68,7 +68,9 @@ export class AddEditSiteComponent implements OnInit {
     if (this.siteForm.valid) {
       this.loading = true;
       if (this.data.site !== null) {
-        this.sitesService.updateSite(this.siteForm.value, this.data.site).subscribe((response: Site) => {
+        const siteData = this.siteForm.value;
+        siteData.aeId = parseInt(siteData.aeId, 10);
+        this.sitesService.updateSite(siteData, this.data.site).subscribe((response: Site) => {
           this.loading = false;
           this.notification.success('Site updated successfully');
           this.dialogRef.close({ response: true });
@@ -76,7 +78,9 @@ export class AddEditSiteComponent implements OnInit {
           this.notification.error('Unable to update the site')
         });
       } else {
-        this.sitesService.createSite(this.siteForm.value).subscribe((response: Site) => {
+        const siteData = this.siteForm.value;
+        siteData.aeId = parseInt(siteData.aeId, 10);
+        this.sitesService.createSite(siteData).subscribe((response: Site) => {
           this.loading = false;
           this.notification.success('Site created successfully');
           this.dialogRef.close({ response: true });
